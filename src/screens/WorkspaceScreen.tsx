@@ -5,6 +5,7 @@ import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
 import { useAppStore } from '../store/appStore';
 import { InventoryItem, TileInstance } from '../types/tiles';
+import { buildExpression, countTiles, isMatch } from '../utils/expression';
 import { GRID_CONFIG } from '../utils/grid';
 import { nextId } from '../utils/id';
 
@@ -12,6 +13,9 @@ export function WorkspaceScreen() {
   const { t } = useTranslation();
   const { state } = useAppStore();
   const [tiles, setTiles] = useState<TileInstance[]>([]);
+  const [validation, setValidation] = useState<'idle' | 'success' | 'fail'>(
+    'idle'
+  );
 
   const selectedSet = equationSets.find(
     (set) => set.id === state.selection.equationSetId
@@ -22,14 +26,22 @@ export function WorkspaceScreen() {
 
   const inventoryItems = useMemo<InventoryItem[]>(
     () => [
-      { kind: 'x2', sign: 1, label: '+x^2' },
-      { kind: 'x2', sign: -1, label: '-x^2' },
+      { kind: 'x2', sign: 1, label: '+x²' },
+      { kind: 'x2', sign: -1, label: '-x²' },
       { kind: 'x', sign: 1, label: '+x' },
       { kind: 'x', sign: -1, label: '-x' },
       { kind: '1', sign: 1, label: '+1' },
       { kind: '1', sign: -1, label: '-1' }
     ],
     []
+  );
+
+  const counts = useMemo(() => countTiles(tiles), [tiles]);
+  const expressionText = useMemo(() => buildExpression(counts), [counts]);
+  const target = selectedDifficulty?.target;
+  const targetText = useMemo(
+    () => (target ? buildExpression(target) : '-'),
+    [target]
   );
 
   const handleAddTile = (item: InventoryItem) => {
@@ -91,12 +103,30 @@ export function WorkspaceScreen() {
             </button>
             <button className="btn secondary">{t('workspace.undo')}</button>
             <button className="btn secondary">{t('workspace.redo')}</button>
-            <button className="btn">{t('workspace.check')}</button>
+            <button
+              className="btn"
+              onClick={() => {
+                if (!target) {
+                  return;
+                }
+                setValidation(isMatch(counts, target) ? 'success' : 'fail');
+              }}
+            >
+              {t('workspace.check')}
+            </button>
           </div>
+          {validation !== 'idle' && (
+            <div className={`result ${validation}`}>
+              {t(`validation.${validation}`)}
+            </div>
+          )}
         </div>
         <div className="panel">
           <strong>{t('workspace.expression')}</strong>
-          <p>2x^2 + 3x - 1</p>
+          <p>{expressionText}</p>
+          <p className="hint">
+            {t('workspace.target')}: {targetText}
+          </p>
         </div>
       </div>
     </section>

@@ -11,7 +11,7 @@ export function TilePiece({ tile, onPointerDown }: TilePieceProps) {
   const pxWidth = size.width * GRID_CONFIG.cellSize;
   const pxHeight = size.height * GRID_CONFIG.cellSize;
 
-  const label = tile.kind === '1' ? '1' : tile.kind === 'x' ? 'x' : 'x^2';
+  const label = tile.kind === '1' ? '1' : tile.kind === 'x' ? 'x' : 'x²';
   const sign = tile.sign === 1 ? '+' : '-';
 
   return (

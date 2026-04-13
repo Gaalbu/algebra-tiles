@@ -42,7 +42,12 @@ const resources = {
         clear: 'Limpar workspace',
         undo: 'Desfazer',
         redo: 'Refazer',
-        check: 'Verificar resultado'
+        check: 'Verificar resultado',
+        target: 'Objetivo'
+      },
+      validation: {
+        success: 'Resultado correto. Muito bem!',
+        fail: 'Ainda nao. Tente novamente.'
       },
       actions: {
         select: 'Selecionar',
@@ -52,7 +57,7 @@ const resources = {
         linearTitle: 'Equacoes lineares',
         linearDesc: 'Trabalhe com termos x e constantes',
         quadraticTitle: 'Equacoes quadradas',
-        quadraticDesc: 'Inclui termos x^2',
+        quadraticDesc: 'Inclui termos x²',
         mixTitle: 'Misturadas',
         mixDesc: 'Combina varios formatos'
       }
@@ -98,7 +103,12 @@ const resources = {
         clear: 'Clear workspace',
         undo: 'Undo',
         redo: 'Redo',
-        check: 'Check result'
+        check: 'Check result',
+        target: 'Target'
+      },
+      validation: {
+        success: 'Correct result. Great job!',
+        fail: 'Not yet. Try again.'
       },
       actions: {
         select: 'Select',
@@ -108,7 +118,7 @@ const resources = {
         linearTitle: 'Linear equations',
         linearDesc: 'Work with x terms and constants',
         quadraticTitle: 'Quadratic equations',
-        quadraticDesc: 'Includes x^2 terms',
+        quadraticDesc: 'Includes x² terms',
         mixTitle: 'Mixed',
         mixDesc: 'Combines different formats'
       }
