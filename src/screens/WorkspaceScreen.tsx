@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { equationSets } from '../data/equations';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { ResultModal } from '../components/ResultModal';
 import { useAppStore } from '../store/appStore';
 import { InventoryItem, TileInstance } from '../types/tiles';
 import { buildExpression, countTiles, isMatch } from '../utils/expression';
@@ -13,9 +14,12 @@ export function WorkspaceScreen() {
   const { t } = useTranslation();
   const { state } = useAppStore();
   const [tiles, setTiles] = useState<TileInstance[]>([]);
+  const [history, setHistory] = useState<TileInstance[][]>([]);
+  const [future, setFuture] = useState<TileInstance[][]>([]);
   const [validation, setValidation] = useState<'idle' | 'success' | 'fail'>(
     'idle'
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const selectedSet = equationSets.find(
     (set) => set.id === state.selection.equationSetId
@@ -44,8 +48,22 @@ export function WorkspaceScreen() {
     [target]
   );
 
+  const updateTiles = (
+    updater: (current: TileInstance[]) => TileInstance[]
+  ) => {
+    setTiles((current) => {
+      const next = updater(current);
+      if (next === current) {
+        return current;
+      }
+      setHistory((stack) => [...stack, current]);
+      setFuture([]);
+      return next;
+    });
+  };
+
   const handleAddTile = (item: InventoryItem) => {
-    setTiles((current) => [
+    updateTiles((current) => [
       ...current,
       {
         id: nextId('tile'),
@@ -58,9 +76,37 @@ export function WorkspaceScreen() {
   };
 
   const handleMoveTile = (id: string, x: number, y: number) => {
-    setTiles((current) =>
+    updateTiles((current) =>
       current.map((tile) => (tile.id === id ? { ...tile, x, y } : tile))
     );
+  };
+
+  const handleClear = () => {
+    if (tiles.length === 0) {
+      return;
+    }
+    updateTiles(() => []);
+    setValidation('idle');
+  };
+
+  const handleUndo = () => {
+    if (history.length === 0) {
+      return;
+    }
+    const previous = history[history.length - 1];
+    setHistory((current) => current.slice(0, -1));
+    setFuture((current) => [...current, tiles]);
+    setTiles(previous);
+  };
+
+  const handleRedo = () => {
+    if (future.length === 0) {
+      return;
+    }
+    const next = future[future.length - 1];
+    setFuture((current) => current.slice(0, -1));
+    setHistory((current) => [...current, tiles]);
+    setTiles(next);
   };
 
   return (
@@ -98,18 +144,34 @@ export function WorkspaceScreen() {
         <div className="panel">
           <strong>{t('workspace.tools')}</strong>
           <div className="grid">
-            <button className="btn secondary">
+            <button className="btn secondary" onClick={handleClear}>
               {t('workspace.clear')}
             </button>
-            <button className="btn secondary">{t('workspace.undo')}</button>
-            <button className="btn secondary">{t('workspace.redo')}</button>
+            <button
+              className="btn secondary"
+              onClick={handleUndo}
+              disabled={history.length === 0}
+            >
+              {t('workspace.undo')}
+            </button>
+            <button
+              className="btn secondary"
+              onClick={handleRedo}
+              disabled={future.length === 0}
+            >
+              {t('workspace.redo')}
+            </button>
             <button
               className="btn"
               onClick={() => {
                 if (!target) {
                   return;
                 }
-                setValidation(isMatch(counts, target) ? 'success' : 'fail');
+                const nextValidation = isMatch(counts, target)
+                  ? 'success'
+                  : 'fail';
+                setValidation(nextValidation);
+                setIsModalOpen(true);
               }}
             >
               {t('workspace.check')}
@@ -129,6 +191,24 @@ export function WorkspaceScreen() {
           </p>
         </div>
       </div>
+      <ResultModal
+        isOpen={isModalOpen && validation !== 'idle'}
+        title={t(`validation.title.${validation}`)}
+        message={t(`validation.${validation}`)}
+        primaryLabel={
+          validation === 'success'
+            ? t('validation.primarySuccess')
+            : t('validation.primaryFail')
+        }
+        secondaryLabel={validation === 'success' ? t('validation.keep') : ''}
+        onSecondary={() => setIsModalOpen(false)}
+        onPrimary={() => {
+          setIsModalOpen(false);
+          if (validation === 'success') {
+            handleClear();
+          }
+        }}
+      />
     </section>
   );
 }

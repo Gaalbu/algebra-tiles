@@ -46,8 +46,15 @@ const resources = {
         target: 'Objetivo'
       },
       validation: {
+        title: {
+          success: 'Parabens!',
+          fail: 'Tente novamente'
+        },
         success: 'Resultado correto. Muito bem!',
-        fail: 'Ainda nao. Tente novamente.'
+        fail: 'Ainda nao. Tente novamente.',
+        primarySuccess: 'Novo desafio',
+        primaryFail: 'Continuar',
+        keep: 'Manter no tabuleiro'
       },
       actions: {
         select: 'Selecionar',
@@ -107,8 +114,15 @@ const resources = {
         target: 'Target'
       },
       validation: {
+        title: {
+          success: 'Well done!',
+          fail: 'Try again'
+        },
         success: 'Correct result. Great job!',
-        fail: 'Not yet. Try again.'
+        fail: 'Not yet. Try again.',
+        primarySuccess: 'New challenge',
+        primaryFail: 'Keep trying',
+        keep: 'Keep on board'
       },
       actions: {
         select: 'Select',

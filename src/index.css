@@ -26,6 +26,11 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -168,6 +173,33 @@ button {
   background: #d5e4fb;
   border: 1px solid #8fb2f5;
   color: #1b2b4f;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 31, 36, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  z-index: 10;
+}
+
+.modal {
+  background: #f1fbf7;
+  border-radius: 16px;
+  border: 1px solid #b4d6d2;
+  max-width: 420px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(12, 30, 36, 0.2);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
 }
 
 .tile-x2 {
