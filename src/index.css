@@ -91,6 +91,78 @@ button {
   grid-template-columns: 280px 1fr;
 }
 
+.hint {
+  font-size: 0.9rem;
+  color: #6b5f44;
+}
+
+.inventory {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  margin-top: 12px;
+}
+
+.inventory-item {
+  border: 1px solid #1b1f24;
+  border-radius: 10px;
+  padding: 10px 8px;
+  background: #f7d774;
+  font-weight: 600;
+}
+
+.inventory-item.neg {
+  background: #f8c6b7;
+}
+
+.board-wrapper {
+  margin: 12px 0;
+  overflow: auto;
+}
+
+.grid-board {
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid #d8cdb6;
+  background-image:
+    linear-gradient(to right, rgba(181, 160, 125, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(181, 160, 125, 0.25) 1px, transparent 1px);
+  background-size: 52px 52px;
+  background-color: #fffaf0;
+}
+
+.tile-wrapper {
+  position: absolute;
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 2px solid #1b1f24;
+  background: #f7d774;
+  font-weight: 700;
+  user-select: none;
+  touch-action: none;
+  box-shadow: 0 6px 14px rgba(27, 31, 36, 0.15);
+}
+
+.tile.neg {
+  background: #f8c6b7;
+}
+
+.tile-x2 {
+  font-size: 1rem;
+}
+
+.tile-x {
+  font-size: 1rem;
+}
+
+.tile-1 {
+  font-size: 0.95rem;
+}
+
 @media (max-width: 900px) {
   .workspace {
     grid-template-columns: 1fr;
