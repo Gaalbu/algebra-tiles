@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { TileInstance } from '../types/tiles';
+import { InventoryItem, TileInstance } from '../types/tiles';
 import { clamp, getTileSize, GRID_CONFIG, snapToGrid } from '../utils/grid';
 import { TilePiece } from './TilePiece';
 
@@ -9,6 +9,9 @@ type GridBoardProps = {
   selectedIds: string[];
   onSelectionChange: (ids: string[]) => void;
   isInteractive?: boolean;
+  onInventoryDrop?: (item: InventoryItem, x: number, y: number) => void;
+  onDragStart?: (tileId: string) => void;
+  onDragEnd?: (tileId: string) => void;
 };
 
 type DragState = {
@@ -23,7 +26,10 @@ export function GridBoard({
   onTileMove,
   selectedIds,
   onSelectionChange,
-  isInteractive = true
+  isInteractive = true,
+  onInventoryDrop,
+  onDragStart,
+  onDragEnd
 }: GridBoardProps) {
   const boardRef = useRef<HTMLDivElement>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
@@ -66,8 +72,49 @@ export function GridBoard({
 
   const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
     if (dragState && event.pointerId === dragState.pointerId) {
+      onDragEnd?.(dragState.id);
       setDragState(null);
     }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!onInventoryDrop) {
+      return;
+    }
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!onInventoryDrop) {
+      return;
+    }
+    event.preventDefault();
+    const data = event.dataTransfer.getData('application/x-inventory-item');
+    if (!data) {
+      return;
+    }
+    let item: InventoryItem | null = null;
+    try {
+      item = JSON.parse(data) as InventoryItem;
+    } catch {
+      item = null;
+    }
+    if (!item) {
+      return;
+    }
+    const board = boardRef.current;
+    if (!board) {
+      return;
+    }
+    const rect = board.getBoundingClientRect();
+    const rawX = event.clientX - rect.left;
+    const rawY = event.clientY - rect.top;
+    const size = getTileSize({ kind: item.kind });
+    const gridX = snapToGrid(rawX, GRID_CONFIG.cellSize);
+    const gridY = snapToGrid(rawY, GRID_CONFIG.cellSize);
+    const maxX = GRID_CONFIG.columns - size.width;
+    const maxY = GRID_CONFIG.rows - size.height;
+    onInventoryDrop(item, clamp(gridX, 0, maxX), clamp(gridY, 0, maxY));
   };
 
   const handleBoardPointerDown = (
@@ -118,6 +165,7 @@ export function GridBoard({
       offsetY,
       pointerId: event.pointerId
     });
+    onDragStart?.(tileId);
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
@@ -130,6 +178,8 @@ export function GridBoard({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
     >
       {tiles.map((tile) => {
         const size = getTileSize(tile);

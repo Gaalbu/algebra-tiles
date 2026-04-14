@@ -114,6 +114,11 @@ button:disabled {
   padding: 10px 8px;
   background: #6fd4c6;
   font-weight: 600;
+  cursor: grab;
+}
+
+.inventory-item:active {
+  cursor: grabbing;
 }
 
 .inventory-item.neg {
@@ -164,6 +169,39 @@ button:disabled {
 .error-text {
   color: #a23b3b;
   font-weight: 600;
+}
+
+.factor-status {
+  margin-top: 8px;
+}
+
+.factor-status.success {
+  color: #0f3d34;
+  font-weight: 700;
+}
+
+.factor-coords {
+  font-size: 0.85rem;
+  color: #3b6f75;
+}
+
+.factor-board-layout {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  grid-template-rows: 36px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.factor-axis {
+  font-weight: 700;
+  color: #0e2a2e;
+  text-align: center;
+}
+
+.factor-axis.y-axis {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 
 .board-wrapper {

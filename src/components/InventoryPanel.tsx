@@ -2,13 +2,15 @@ import { InventoryItem } from '../types/tiles';
 
 type InventoryPanelProps = {
   items: InventoryItem[];
-  onAdd: (item: InventoryItem) => void;
+  onDragStart?: (item: InventoryItem) => void;
+  onDragEnd?: () => void;
   disabled?: boolean;
 };
 
 export function InventoryPanel({
   items,
-  onAdd,
+  onDragStart,
+  onDragEnd,
   disabled = false
 }: InventoryPanelProps) {
   return (
@@ -17,7 +19,15 @@ export function InventoryPanel({
         <button
           key={`${item.kind}-${item.sign}`}
           className={`inventory-item ${item.sign === 1 ? 'pos' : 'neg'}`}
-          onClick={() => onAdd(item)}
+          draggable={!disabled}
+          onDragStart={(event) => {
+            event.dataTransfer.setData(
+              'application/x-inventory-item',
+              JSON.stringify(item)
+            );
+            onDragStart?.(item);
+          }}
+          onDragEnd={() => onDragEnd?.()}
           disabled={disabled}
           type="button"
         >

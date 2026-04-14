@@ -65,7 +65,15 @@ const resources = {
         title: 'Factor',
         subtitle: 'Modele a area para fatorar polinomios.',
         gridLabel: 'Area de fatoracao',
-        resultLabel: 'Resultado'
+        resultLabel: 'Resultado',
+        autoHint: 'Deteccao automatica do retangulo pelo canvas',
+        valid: 'Fatoracao detectada:',
+        invalid: 'Retangulo invalido ou incompleto.',
+        gaps: 'Lacunas',
+        overlaps: 'Sobreposicoes',
+        gapSample: 'Exemplos de lacunas',
+        overlapSample: 'Exemplos de sobreposicoes',
+        times: 'x'
       },
       expression: {
         placeholder: 'Digite a expressao (ex.: x^2 + 3x - 2)',
@@ -173,7 +181,15 @@ const resources = {
         title: 'Factor',
         subtitle: 'Use area modeling to factor polynomials.',
         gridLabel: 'Factor area',
-        resultLabel: 'Result'
+        resultLabel: 'Result',
+        autoHint: 'Automatic rectangle detection from the canvas',
+        valid: 'Factorization detected:',
+        invalid: 'Invalid or incomplete rectangle.',
+        gaps: 'Gaps',
+        overlaps: 'Overlaps',
+        gapSample: 'Gap samples',
+        overlapSample: 'Overlap samples',
+        times: 'x'
       },
       expression: {
         placeholder: 'Type the expression (e.g. x^2 + 3x - 2)',

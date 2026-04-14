@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { equationSets } from '../data/equations';
 import { GridBoard } from '../components/GridBoard';
@@ -19,9 +19,12 @@ export function WorkspaceScreen() {
   const { t } = useTranslation();
   const { state } = useAppStore();
   const [tiles, setTiles] = useState<TileInstance[]>([]);
+  const tilesRef = useRef<TileInstance[]>(tiles);
   const [history, setHistory] = useState<TileInstance[][]>([]);
   const [future, setFuture] = useState<TileInstance[][]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const dragSnapshotRef = useRef<TileInstance[] | null>(null);
+  const isDraggingRef = useRef(false);
   const [validation, setValidation] = useState<'idle' | 'success' | 'fail'>(
     'idle'
   );
@@ -54,37 +57,70 @@ export function WorkspaceScreen() {
     [target]
   );
 
+  useEffect(() => {
+    tilesRef.current = tiles;
+  }, [tiles]);
+
   const updateTiles = (
-    updater: (current: TileInstance[]) => TileInstance[]
+    updater: (current: TileInstance[]) => TileInstance[],
+    recordHistory = true
   ) => {
     setTiles((current) => {
       const next = updater(current);
       if (next === current) {
         return current;
       }
-      setHistory((stack) => [...stack, current]);
-      setFuture([]);
+      if (recordHistory) {
+        setHistory((stack) => [...stack, current]);
+        setFuture([]);
+      }
       return next;
     });
   };
 
-  const handleAddTile = (item: InventoryItem) => {
+  const handleAddTile = (item: InventoryItem, x = 0, y = 0) => {
     updateTiles((current) => [
       ...current,
       {
         id: nextId('tile'),
         kind: item.kind,
         sign: item.sign,
-        x: 0,
-        y: 0
+        x,
+        y
       }
     ]);
   };
 
   const handleMoveTile = (id: string, x: number, y: number) => {
-    updateTiles((current) =>
-      current.map((tile) => (tile.id === id ? { ...tile, x, y } : tile))
-    );
+    updateTiles((current) => {
+      const target = current.find((tile) => tile.id === id);
+      if (!target || (target.x === x && target.y === y)) {
+        return current;
+      }
+      return current.map((tile) =>
+        tile.id === id ? { ...tile, x, y } : tile
+      );
+    }, !isDraggingRef.current);
+  };
+
+  const handleDragStart = () => {
+    isDraggingRef.current = true;
+    dragSnapshotRef.current = tilesRef.current;
+  };
+
+  const handleDragEnd = () => {
+    isDraggingRef.current = false;
+    const snapshot = dragSnapshotRef.current;
+    dragSnapshotRef.current = null;
+    if (!snapshot) {
+      return;
+    }
+    const current = tilesRef.current;
+    if (!didTilesMove(snapshot, current)) {
+      return;
+    }
+    setHistory((stack) => [...stack, snapshot]);
+    setFuture([]);
   };
 
   const handleClear = () => {
@@ -137,12 +173,12 @@ export function WorkspaceScreen() {
       <div className="workspace">
         <div className="panel">
           <strong>{t('workspace.inventory')}</strong>
-          <InventoryPanel items={inventoryItems} onAdd={handleAddTile} />
+          <InventoryPanel items={inventoryItems} />
         </div>
         <div className="panel">
           <strong>{t('workspace.grid')}</strong>
           <p className="hint">
-            Grid magnetico para arrastar e soltar. Clique nos blocos do
+            Grid magnetico para arrastar e soltar. Arraste os blocos do
             inventario para adicionar.
           </p>
           <div className="board-wrapper">
@@ -151,6 +187,9 @@ export function WorkspaceScreen() {
               onTileMove={handleMoveTile}
               selectedIds={selectedIds}
               onSelectionChange={setSelectedIds}
+              onInventoryDrop={handleAddTile}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
             />
           </div>
           <p className="hint">
@@ -233,4 +272,21 @@ export function WorkspaceScreen() {
       />
     </section>
   );
+}
+
+function didTilesMove(previous: TileInstance[], current: TileInstance[]) {
+  if (previous.length !== current.length) {
+    return true;
+  }
+  const byId = new Map(previous.map((tile) => [tile.id, tile]));
+  for (const tile of current) {
+    const prev = byId.get(tile.id);
+    if (!prev) {
+      return true;
+    }
+    if (prev.x !== tile.x || prev.y !== tile.y) {
+      return true;
+    }
+  }
+  return false;
 }

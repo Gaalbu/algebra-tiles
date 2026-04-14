@@ -105,23 +105,29 @@ export function CanvasBasicoScreen() {
     });
   };
 
-  const handleAddTile = (item: InventoryItem) => {
+  const handleAddTile = (item: InventoryItem, x = 0, y = 0) => {
     updateTiles((current) => [
       ...current,
       {
         id: nextId('tile'),
         kind: item.kind,
         sign: item.sign,
-        x: 0,
-        y: 0
+        x,
+        y
       }
     ]);
   };
 
   const handleMoveTile = (id: string, x: number, y: number) => {
-    updateTiles((current) =>
-      current.map((tile) => (tile.id === id ? { ...tile, x, y } : tile))
-    );
+    updateTiles((current) => {
+      const target = current.find((tile) => tile.id === id);
+      if (!target || (target.x === x && target.y === y)) {
+        return current;
+      }
+      return current.map((tile) =>
+        tile.id === id ? { ...tile, x, y } : tile
+      );
+    });
   };
 
   const handleClear = () => {
@@ -211,11 +217,7 @@ export function CanvasBasicoScreen() {
       <div className="workspace">
         <div className="panel">
           <strong>{t('workspace.inventory')}</strong>
-          <InventoryPanel
-            items={inventoryItems}
-            onAdd={handleAddTile}
-            disabled={showSolution}
-          />
+          <InventoryPanel items={inventoryItems} disabled={showSolution} />
         </div>
         <div className="panel">
           <strong>{t('workspace.grid')}</strong>
@@ -226,6 +228,7 @@ export function CanvasBasicoScreen() {
               selectedIds={selectedIds}
               onSelectionChange={setSelectedIds}
               isInteractive={!showSolution}
+              onInventoryDrop={showSolution ? undefined : handleAddTile}
             />
           </div>
           <p className="hint">

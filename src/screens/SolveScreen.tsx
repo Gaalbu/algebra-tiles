@@ -142,24 +142,30 @@ export function SolveScreen() {
     });
   };
 
-  const handleAddTile = (item: InventoryItem) => {
+  const handleAddTile = (item: InventoryItem, x = 0, y = 0) => {
     updatePairTiles((current) => ({
       left: [
         ...current.left,
-        { id: nextId('tile'), kind: item.kind, sign: item.sign, x: 0, y: 0 }
+        { id: nextId('tile'), kind: item.kind, sign: item.sign, x, y }
       ],
       right: [
         ...current.right,
-        { id: nextId('tile'), kind: item.kind, sign: item.sign, x: 0, y: 0 }
+        { id: nextId('tile'), kind: item.kind, sign: item.sign, x, y }
       ]
     }));
   };
 
   const handleMoveLeftTile = (id: string, x: number, y: number) => {
     updatePairTiles((current) => ({
-      left: current.left.map((tile) =>
-        tile.id === id ? { ...tile, x, y } : tile
-      ),
+      left: current.left.map((tile) => {
+        if (tile.id !== id) {
+          return tile;
+        }
+        if (tile.x === x && tile.y === y) {
+          return tile;
+        }
+        return { ...tile, x, y };
+      }),
       right: current.right
     }));
   };
@@ -167,9 +173,15 @@ export function SolveScreen() {
   const handleMoveRightTile = (id: string, x: number, y: number) => {
     updatePairTiles((current) => ({
       left: current.left,
-      right: current.right.map((tile) =>
-        tile.id === id ? { ...tile, x, y } : tile
-      )
+      right: current.right.map((tile) => {
+        if (tile.id !== id) {
+          return tile;
+        }
+        if (tile.x === x && tile.y === y) {
+          return tile;
+        }
+        return { ...tile, x, y };
+      })
     }));
   };
 
@@ -269,11 +281,7 @@ export function SolveScreen() {
       <div className="workspace solve-workspace">
         <div className="panel">
           <strong>{t('workspace.inventory')}</strong>
-          <InventoryPanel
-            items={inventoryItems}
-            onAdd={handleAddTile}
-            disabled={showSolution}
-          />
+          <InventoryPanel items={inventoryItems} disabled={showSolution} />
         </div>
         <div className="solve-boards">
           <div className="panel">
@@ -285,6 +293,7 @@ export function SolveScreen() {
                 selectedIds={selectedLeftIds}
                 onSelectionChange={setSelectedLeftIds}
                 isInteractive={!showSolution}
+                onInventoryDrop={showSolution ? undefined : handleAddTile}
               />
             </div>
           </div>
@@ -298,6 +307,7 @@ export function SolveScreen() {
                 selectedIds={selectedRightIds}
                 onSelectionChange={setSelectedRightIds}
                 isInteractive={!showSolution}
+                onInventoryDrop={showSolution ? undefined : handleAddTile}
               />
             </div>
           </div>
