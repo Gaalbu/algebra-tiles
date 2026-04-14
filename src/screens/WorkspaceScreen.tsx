@@ -6,7 +6,12 @@ import { InventoryPanel } from '../components/InventoryPanel';
 import { ResultModal } from '../components/ResultModal';
 import { useAppStore } from '../store/appStore';
 import { InventoryItem, TileInstance } from '../types/tiles';
-import { buildExpression, countTiles, isMatch } from '../utils/expression';
+import {
+  applyZeroPairs,
+  buildExpression,
+  countTiles,
+  isMatch
+} from '../utils/expression';
 import { GRID_CONFIG } from '../utils/grid';
 import { nextId } from '../utils/id';
 
@@ -16,6 +21,7 @@ export function WorkspaceScreen() {
   const [tiles, setTiles] = useState<TileInstance[]>([]);
   const [history, setHistory] = useState<TileInstance[][]>([]);
   const [future, setFuture] = useState<TileInstance[][]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [validation, setValidation] = useState<'idle' | 'success' | 'fail'>(
     'idle'
   );
@@ -87,6 +93,7 @@ export function WorkspaceScreen() {
     }
     updateTiles(() => []);
     setValidation('idle');
+    setSelectedIds([]);
   };
 
   const handleUndo = () => {
@@ -97,6 +104,7 @@ export function WorkspaceScreen() {
     setHistory((current) => current.slice(0, -1));
     setFuture((current) => [...current, tiles]);
     setTiles(previous);
+    setSelectedIds([]);
   };
 
   const handleRedo = () => {
@@ -107,6 +115,12 @@ export function WorkspaceScreen() {
     setFuture((current) => current.slice(0, -1));
     setHistory((current) => [...current, tiles]);
     setTiles(next);
+    setSelectedIds([]);
+  };
+
+  const handleZeroPairs = () => {
+    updateTiles((current) => applyZeroPairs(current, selectedIds));
+    setSelectedIds([]);
   };
 
   return (
@@ -132,7 +146,12 @@ export function WorkspaceScreen() {
             inventario para adicionar.
           </p>
           <div className="board-wrapper">
-            <GridBoard tiles={tiles} onTileMove={handleMoveTile} />
+            <GridBoard
+              tiles={tiles}
+              onTileMove={handleMoveTile}
+              selectedIds={selectedIds}
+              onSelectionChange={setSelectedIds}
+            />
           </div>
           <p className="hint">
             {GRID_CONFIG.columns}x{GRID_CONFIG.rows} celulas
@@ -146,6 +165,9 @@ export function WorkspaceScreen() {
           <div className="grid">
             <button className="btn secondary" onClick={handleClear}>
               {t('workspace.clear')}
+            </button>
+            <button className="btn secondary" onClick={handleZeroPairs}>
+              {t('workspace.zeroPair')}
             </button>
             <button
               className="btn secondary"

@@ -4,6 +4,9 @@ import { HomeScreen } from './screens/HomeScreen';
 import { EquationSelectScreen } from './screens/EquationSelectScreen';
 import { DifficultySelectScreen } from './screens/DifficultySelectScreen';
 import { WorkspaceScreen } from './screens/WorkspaceScreen';
+import { CanvasBasicoScreen } from './screens/CanvasBasicoScreen';
+import { SolveScreen } from './screens/SolveScreen';
+import { FactorScreen } from './screens/FactorScreen';
 import { useAppStore } from './store/appStore';
 
 export function App() {
@@ -24,6 +27,9 @@ export function App() {
           <Link to="/equations">{t('nav.equations')}</Link>
           <Link to="/difficulty">{t('nav.difficulty')}</Link>
           <Link to="/workspace">{t('nav.workspace')}</Link>
+          <Link to="/canvas-basico">{t('nav.canvasBasico')}</Link>
+          <Link to="/solve">{t('nav.solve')}</Link>
+          <Link to="/factor">{t('nav.factor')}</Link>
         </nav>
         <div>
           <button
@@ -60,6 +66,9 @@ export function App() {
               )
             }
           />
+          <Route path="/canvas-basico" element={<CanvasBasicoScreen />} />
+          <Route path="/solve" element={<SolveScreen />} />
+          <Route path="/factor" element={<FactorScreen />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

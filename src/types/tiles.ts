@@ -8,6 +8,7 @@ export type TileInstance = {
   sign: TileSign;
   x: number;
   y: number;
+  orientation?: 'horizontal' | 'vertical';
 };
 
 export type InventoryItem = {

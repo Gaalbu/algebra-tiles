@@ -11,7 +11,10 @@ const resources = {
         home: 'Inicio',
         equations: 'Equacoes',
         difficulty: 'Dificuldade',
-        workspace: 'Workspace'
+        workspace: 'Workspace',
+        canvasBasico: 'Canvas basico',
+        solve: 'Solve',
+        factor: 'Factor'
       },
       home: {
         title: 'Aprenda com blocos algebricos',
@@ -40,10 +43,47 @@ const resources = {
         tools: 'Ferramentas',
         expression: 'Expressao ativa',
         clear: 'Limpar workspace',
+        zeroPair: 'Zero pair',
         undo: 'Desfazer',
         redo: 'Refazer',
         check: 'Verificar resultado',
         target: 'Objetivo'
+      },
+      canvasBasico: {
+        title: 'Canvas basico',
+        subtitle: 'Monte blocos livremente e teste expressoes.'
+      },
+      solve: {
+        title: 'Solve',
+        subtitle: 'Equacoes com dois lados e operacoes equivalentes.',
+        placeholder: 'Digite a equacao (ex.: x + 2 = 5)',
+        leftSide: 'Lado esquerdo',
+        rightSide: 'Lado direito',
+        summary: 'Resumo da equacao'
+      },
+      factor: {
+        title: 'Factor',
+        subtitle: 'Modele a area para fatorar polinomios.',
+        gridLabel: 'Area de fatoracao',
+        resultLabel: 'Resultado'
+      },
+      expression: {
+        placeholder: 'Digite a expressao (ex.: x^2 + 3x - 2)',
+        showSolution: 'Mostrar solucao em blocos',
+        invalid: 'Expressao invalida',
+        typeLabel: 'Tipo de expressao'
+      },
+      expressionTypes: {
+        integers: 'Inteiros com sinal',
+        zeroPairs: 'Pares nulos',
+        simpleEquations: 'Equacoes simples',
+        twoSideEquations: 'Equacoes com dois lados',
+        likeTerms: 'Termos semelhantes',
+        distributive: 'Distributiva',
+        areaProducts: 'Area de produtos algebricos',
+        binomialMultiplication: 'Multiplicacao de binomios',
+        perfectSquare: 'Quadrado perfeito',
+        completeSquare: 'Completar quadrados'
       },
       validation: {
         title: {
@@ -79,7 +119,10 @@ const resources = {
         home: 'Home',
         equations: 'Equations',
         difficulty: 'Difficulty',
-        workspace: 'Workspace'
+        workspace: 'Workspace',
+        canvasBasico: 'Basic canvas',
+        solve: 'Solve',
+        factor: 'Factor'
       },
       home: {
         title: 'Learn with algebra tiles',
@@ -108,10 +151,47 @@ const resources = {
         tools: 'Tools',
         expression: 'Active expression',
         clear: 'Clear workspace',
+        zeroPair: 'Zero pair',
         undo: 'Undo',
         redo: 'Redo',
         check: 'Check result',
         target: 'Target'
+      },
+      canvasBasico: {
+        title: 'Basic canvas',
+        subtitle: 'Build freely and test expressions.'
+      },
+      solve: {
+        title: 'Solve',
+        subtitle: 'Two-sided equations with equivalent operations.',
+        placeholder: 'Type the equation (e.g. x + 2 = 5)',
+        leftSide: 'Left side',
+        rightSide: 'Right side',
+        summary: 'Equation summary'
+      },
+      factor: {
+        title: 'Factor',
+        subtitle: 'Use area modeling to factor polynomials.',
+        gridLabel: 'Factor area',
+        resultLabel: 'Result'
+      },
+      expression: {
+        placeholder: 'Type the expression (e.g. x^2 + 3x - 2)',
+        showSolution: 'Show solution as tiles',
+        invalid: 'Invalid expression',
+        typeLabel: 'Expression type'
+      },
+      expressionTypes: {
+        integers: 'Signed integers',
+        zeroPairs: 'Zero pairs',
+        simpleEquations: 'Simple equations',
+        twoSideEquations: 'Two-sided equations',
+        likeTerms: 'Like terms',
+        distributive: 'Distributive property',
+        areaProducts: 'Algebraic area products',
+        binomialMultiplication: 'Binomial multiplication',
+        perfectSquare: 'Perfect square',
+        completeSquare: 'Complete the square'
       },
       validation: {
         title: {

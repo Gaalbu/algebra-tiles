@@ -14,6 +14,17 @@ export const TILE_SIZES: Record<TileKind, TileSize> = {
   '1': { width: 1, height: 1 }
 };
 
+export function getTileSize(tile: {
+  kind: TileKind;
+  orientation?: 'horizontal' | 'vertical';
+}): TileSize {
+  const base = TILE_SIZES[tile.kind];
+  if (tile.kind !== 'x' || tile.orientation !== 'vertical') {
+    return base;
+  }
+  return { width: base.height, height: base.width };
+}
+
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
@@ -28,7 +39,7 @@ export function layoutTiles(tiles: TileInstance[], columns: number) {
   let rowHeight = 1;
 
   return tiles.map((tile) => {
-    const size = TILE_SIZES[tile.kind];
+    const size = getTileSize(tile);
     if (cursorX + size.width > columns) {
       cursorX = 0;
       cursorY += rowHeight;

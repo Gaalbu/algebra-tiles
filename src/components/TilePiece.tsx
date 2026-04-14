@@ -1,5 +1,5 @@
 import { TileInstance } from '../types/tiles';
-import { GRID_CONFIG, TILE_SIZES } from '../utils/grid';
+import { getTileSize, GRID_CONFIG } from '../utils/grid';
 
 type TilePieceProps = {
   tile: TileInstance;
@@ -8,7 +8,7 @@ type TilePieceProps = {
 };
 
 export function TilePiece({ tile, isSelected, onPointerDown }: TilePieceProps) {
-  const size = TILE_SIZES[tile.kind];
+  const size = getTileSize(tile);
   const pxWidth = size.width * GRID_CONFIG.cellSize;
   const pxHeight = size.height * GRID_CONFIG.cellSize;
 

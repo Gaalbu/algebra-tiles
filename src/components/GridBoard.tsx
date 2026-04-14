@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { TileInstance } from '../types/tiles';
-import { clamp, GRID_CONFIG, snapToGrid, TILE_SIZES } from '../utils/grid';
+import { clamp, getTileSize, GRID_CONFIG, snapToGrid } from '../utils/grid';
 import { TilePiece } from './TilePiece';
 
 type GridBoardProps = {
@@ -50,7 +50,7 @@ export function GridBoard({
       return;
     }
 
-    const size = TILE_SIZES[targetTile.kind];
+    const size = getTileSize(targetTile);
     const gridX = snapToGrid(rawX, GRID_CONFIG.cellSize);
     const gridY = snapToGrid(rawY, GRID_CONFIG.cellSize);
 
@@ -132,7 +132,7 @@ export function GridBoard({
       onPointerLeave={handlePointerUp}
     >
       {tiles.map((tile) => {
-        const size = TILE_SIZES[tile.kind];
+        const size = getTileSize(tile);
         const left = tile.x * GRID_CONFIG.cellSize;
         const top = tile.y * GRID_CONFIG.cellSize;
         const isSelected = selectedIds.includes(tile.id);
