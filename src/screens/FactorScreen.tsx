@@ -117,6 +117,15 @@ export function FactorScreen() {
     setSelectedIds([]);
   };
 
+  const handleDeleteSelected = () => {
+    if (selectedIds.length === 0) {
+      return;
+    }
+    const selected = new Set(selectedIds);
+    updateTiles((current) => current.filter((tile) => !selected.has(tile.id)));
+    setSelectedIds([]);
+  };
+
   const gapPreview = factorization.gaps.slice(0, 8);
   const overlapPreview = factorization.overlaps.slice(0, 8);
 
@@ -193,6 +202,13 @@ export function FactorScreen() {
               onClick={handleZeroPairs}
             >
               {t('workspace.zeroPair')}
+            </button>
+            <button
+              className="btn secondary"
+              onClick={handleDeleteSelected}
+              disabled={selectedIds.length === 0}
+            >
+              {t('workspace.deleteSelected')}
             </button>
             <button
               className="btn secondary"

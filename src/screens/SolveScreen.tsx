@@ -232,6 +232,20 @@ export function SolveScreen() {
     setSelectedRightIds([]);
   };
 
+  const handleDeleteSelected = () => {
+    if (showSolution) {
+      return;
+    }
+    const leftSet = new Set(selectedLeftIds);
+    const rightSet = new Set(selectedRightIds);
+    updatePairTiles((current) => ({
+      left: current.left.filter((tile) => !leftSet.has(tile.id)),
+      right: current.right.filter((tile) => !rightSet.has(tile.id))
+    }));
+    setSelectedLeftIds([]);
+    setSelectedRightIds([]);
+  };
+
   const parseError =
     showSolution && parseResult?.error ? t('expression.invalid') : '';
 
@@ -331,6 +345,16 @@ export function SolveScreen() {
               disabled={showSolution}
             >
               {t('workspace.zeroPair')}
+            </button>
+            <button
+              className="btn secondary"
+              onClick={handleDeleteSelected}
+              disabled={
+                showSolution ||
+                (selectedLeftIds.length === 0 && selectedRightIds.length === 0)
+              }
+            >
+              {t('workspace.deleteSelected')}
             </button>
             <button
               className="btn secondary"

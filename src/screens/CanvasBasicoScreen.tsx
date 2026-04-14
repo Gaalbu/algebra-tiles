@@ -168,6 +168,15 @@ export function CanvasBasicoScreen() {
     setSelectedIds([]);
   };
 
+  const handleDeleteSelected = () => {
+    if (showSolution || selectedIds.length === 0) {
+      return;
+    }
+    const selected = new Set(selectedIds);
+    updateTiles((current) => current.filter((tile) => !selected.has(tile.id)));
+    setSelectedIds([]);
+  };
+
   const parseError =
     showSolution && parseResult?.error ? t('expression.invalid') : '';
 
@@ -254,6 +263,13 @@ export function CanvasBasicoScreen() {
               disabled={showSolution}
             >
               {t('workspace.zeroPair')}
+            </button>
+            <button
+              className="btn secondary"
+              onClick={handleDeleteSelected}
+              disabled={showSolution || selectedIds.length === 0}
+            >
+              {t('workspace.deleteSelected')}
             </button>
             <button
               className="btn secondary"

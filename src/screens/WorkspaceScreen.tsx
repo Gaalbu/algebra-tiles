@@ -159,6 +159,15 @@ export function WorkspaceScreen() {
     setSelectedIds([]);
   };
 
+  const handleDeleteSelected = () => {
+    if (selectedIds.length === 0) {
+      return;
+    }
+    const selected = new Set(selectedIds);
+    updateTiles((current) => current.filter((tile) => !selected.has(tile.id)));
+    setSelectedIds([]);
+  };
+
   return (
     <section className="grid">
       <div className="card">
@@ -207,6 +216,13 @@ export function WorkspaceScreen() {
             </button>
             <button className="btn secondary" onClick={handleZeroPairs}>
               {t('workspace.zeroPair')}
+            </button>
+            <button
+              className="btn secondary"
+              onClick={handleDeleteSelected}
+              disabled={selectedIds.length === 0}
+            >
+              {t('workspace.deleteSelected')}
             </button>
             <button
               className="btn secondary"
