@@ -8,26 +8,12 @@ import { GRID_CONFIG } from '../utils/grid';
 import { nextId } from '../utils/id';
 import { detectFactorization } from '../utils/factorization';
 
-const EXPRESSION_TYPES = [
-  'integers',
-  'zeroPairs',
-  'simpleEquations',
-  'twoSideEquations',
-  'likeTerms',
-  'distributive',
-  'areaProducts',
-  'binomialMultiplication',
-  'perfectSquare',
-  'completeSquare'
-];
-
 export function FactorScreen() {
   const { t } = useTranslation();
   const [tiles, setTiles] = useState<TileInstance[]>([]);
   const [history, setHistory] = useState<TileInstance[][]>([]);
   const [future, setFuture] = useState<TileInstance[][]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [expressionType, setExpressionType] = useState(EXPRESSION_TYPES[0]);
 
   const inventoryItems = useMemo<InventoryItem[]>(
     () => [
@@ -138,20 +124,6 @@ export function FactorScreen() {
 
       <div className="panel controls">
         <div className="controls-row">
-          <label className="select-label">
-            {t('expression.typeLabel')}
-            <select
-              className="select"
-              value={expressionType}
-              onChange={(event) => setExpressionType(event.target.value)}
-            >
-              {EXPRESSION_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {t(`expressionTypes.${type}`)}
-                </option>
-              ))}
-            </select>
-          </label>
           <span className="hint">{t('factor.autoHint')}</span>
         </div>
       </div>
