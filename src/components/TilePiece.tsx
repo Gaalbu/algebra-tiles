@@ -3,10 +3,11 @@ import { GRID_CONFIG, TILE_SIZES } from '../utils/grid';
 
 type TilePieceProps = {
   tile: TileInstance;
+  isSelected?: boolean;
   onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => void;
 };
 
-export function TilePiece({ tile, onPointerDown }: TilePieceProps) {
+export function TilePiece({ tile, isSelected, onPointerDown }: TilePieceProps) {
   const size = TILE_SIZES[tile.kind];
   const pxWidth = size.width * GRID_CONFIG.cellSize;
   const pxHeight = size.height * GRID_CONFIG.cellSize;
@@ -16,7 +17,9 @@ export function TilePiece({ tile, onPointerDown }: TilePieceProps) {
 
   return (
     <div
-      className={`tile tile-${tile.kind} ${tile.sign === 1 ? 'pos' : 'neg'}`}
+      className={`tile tile-${tile.kind} ${tile.sign === 1 ? 'pos' : 'neg'} ${
+        isSelected ? 'selected' : ''
+      }`}
       style={{
         width: pxWidth,
         height: pxHeight

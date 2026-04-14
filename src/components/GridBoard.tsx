@@ -6,6 +6,9 @@ import { TilePiece } from './TilePiece';
 type GridBoardProps = {
   tiles: TileInstance[];
   onTileMove: (id: string, x: number, y: number) => void;
+  selectedIds: string[];
+  onSelectionChange: (ids: string[]) => void;
+  isInteractive?: boolean;
 };
 
 type DragState = {
@@ -15,7 +18,13 @@ type DragState = {
   pointerId: number;
 };
 
-export function GridBoard({ tiles, onTileMove }: GridBoardProps) {
+export function GridBoard({
+  tiles,
+  onTileMove,
+  selectedIds,
+  onSelectionChange,
+  isInteractive = true
+}: GridBoardProps) {
   const boardRef = useRef<HTMLDivElement>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
 
@@ -23,7 +32,7 @@ export function GridBoard({ tiles, onTileMove }: GridBoardProps) {
   const boardHeight = GRID_CONFIG.rows * GRID_CONFIG.cellSize;
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragState || event.pointerId !== dragState.pointerId) {
+    if (!isInteractive || !dragState || event.pointerId !== dragState.pointerId) {
       return;
     }
 
@@ -61,11 +70,63 @@ export function GridBoard({ tiles, onTileMove }: GridBoardProps) {
     }
   };
 
+  const handleBoardPointerDown = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    if (event.currentTarget !== event.target) {
+      return;
+    }
+    onSelectionChange([]);
+  };
+
+  const handleTilePointerDown = (
+    tileId: string,
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const isMulti = event.shiftKey || event.ctrlKey || event.metaKey;
+    if (isMulti) {
+      if (selectedIds.includes(tileId)) {
+        onSelectionChange(selectedIds.filter((id) => id !== tileId));
+      } else {
+        onSelectionChange([...selectedIds, tileId]);
+      }
+    } else if (!selectedIds.includes(tileId) || selectedIds.length > 1) {
+      onSelectionChange([tileId]);
+    }
+
+    if (!isInteractive) {
+      return;
+    }
+
+    const board = boardRef.current;
+    if (!board) {
+      return;
+    }
+    const rect = board.getBoundingClientRect();
+    const targetTile = tiles.find((tile) => tile.id === tileId);
+    if (!targetTile) {
+      return;
+    }
+    const left = targetTile.x * GRID_CONFIG.cellSize;
+    const top = targetTile.y * GRID_CONFIG.cellSize;
+    const offsetX = event.clientX - rect.left - left;
+    const offsetY = event.clientY - rect.top - top;
+
+    setDragState({
+      id: tileId,
+      offsetX,
+      offsetY,
+      pointerId: event.pointerId
+    });
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
   return (
     <div
       ref={boardRef}
       className="grid-board"
       style={{ width: boardWidth, height: boardHeight }}
+      onPointerDown={handleBoardPointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}
@@ -74,6 +135,7 @@ export function GridBoard({ tiles, onTileMove }: GridBoardProps) {
         const size = TILE_SIZES[tile.kind];
         const left = tile.x * GRID_CONFIG.cellSize;
         const top = tile.y * GRID_CONFIG.cellSize;
+        const isSelected = selectedIds.includes(tile.id);
 
         return (
           <div
@@ -88,23 +150,8 @@ export function GridBoard({ tiles, onTileMove }: GridBoardProps) {
           >
             <TilePiece
               tile={tile}
-              onPointerDown={(event) => {
-                const board = boardRef.current;
-                if (!board) {
-                  return;
-                }
-                const rect = board.getBoundingClientRect();
-                const offsetX = event.clientX - rect.left - left;
-                const offsetY = event.clientY - rect.top - top;
-
-                setDragState({
-                  id: tile.id,
-                  offsetX,
-                  offsetY,
-                  pointerId: event.pointerId
-                });
-                event.currentTarget.setPointerCapture(event.pointerId);
-              }}
+              isSelected={isSelected}
+              onPointerDown={(event) => handleTilePointerDown(tile.id, event)}
             />
           </div>
         );
