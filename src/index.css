@@ -45,13 +45,31 @@ button:disabled {
   box-shadow: 0 10px 30px rgba(27, 31, 36, 0.08);
 }
 
+.page-header {
+  border: 1px solid #79bdb2;
+  background: linear-gradient(135deg, #d7f3ec, #f1fbf7);
+}
+
+.selection-chip {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin: 8px 0 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #e6f7f3;
+  border: 1px solid #79bdb2;
+  font-size: 0.9rem;
+}
+
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
   border-bottom: 1px solid #b4d6d2;
-  background: #d6f1ec;
+  background: linear-gradient(90deg, #cfeee8, #eaf7f4);
+  box-shadow: 0 8px 20px rgba(27, 31, 36, 0.08);
 }
 
 .nav {

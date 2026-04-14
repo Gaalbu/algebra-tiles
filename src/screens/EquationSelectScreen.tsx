@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/appStore';
+import { expressionTypes } from '../data/expressionTypes';
 
 export function EquationSelectScreen() {
   const { t } = useTranslation();
@@ -9,22 +10,9 @@ export function EquationSelectScreen() {
   const { dispatch } = useAppStore();
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
-  const expressionTypes = [
-    'integers',
-    'zeroPairs',
-    'simpleEquations',
-    'twoSideEquations',
-    'likeTerms',
-    'distributive',
-    'areaProducts',
-    'binomialMultiplication',
-    'perfectSquare',
-    'completeSquare'
-  ];
-
   return (
     <section className="grid two">
-      <div className="card">
+      <div className="card page-header">
         <h1>{t('equations.title')}</h1>
         <p>{t('equations.subtitle')}</p>
         {selectedType && (
@@ -34,15 +22,16 @@ export function EquationSelectScreen() {
         )}
       </div>
       {expressionTypes.map((type) => (
-        <div className="card" key={type}>
-          <h2>{t(`expressionTypes.${type}`)}</h2>
+        <div className="card" key={type.id}>
+          <h2>{t(type.labelKey)}</h2>
+          <p>{t(type.descriptionKey)}</p>
           <button
             className="btn"
             onClick={() => {
-              setSelectedType(type);
+              setSelectedType(type.id);
               dispatch({
                 type: 'selectExpressionType',
-                payload: { expressionTypeId: type }
+                payload: { expressionTypeId: type.id }
               });
               navigate('/workspace');
             }}

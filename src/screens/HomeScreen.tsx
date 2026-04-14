@@ -6,7 +6,7 @@ export function HomeScreen() {
 
   return (
     <section className="grid">
-      <div className="card">
+      <div className="card page-header">
         <h1>{t('home.chooseTitle')}</h1>
         <p>{t('home.chooseSubtitle')}</p>
       </div>

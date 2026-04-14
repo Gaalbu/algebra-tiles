@@ -182,7 +182,7 @@ export function CanvasBasicoScreen() {
 
   return (
     <section className="grid">
-      <div className="card">
+      <div className="card page-header">
         <h1>{t('canvasBasico.title')}</h1>
         <p>{t('canvasBasico.subtitle')}</p>
       </div>

@@ -58,6 +58,7 @@ const resources = {
         zeroPair: 'Zero pair',
         deleteSelected: 'Apagar selecionado',
         backToSelection: 'Voltar para selecao',
+        selectedEquation: 'Equacao selecionada:' ,
         undo: 'Desfazer',
         redo: 'Refazer',
         check: 'Verificar resultado',
@@ -106,6 +107,18 @@ const resources = {
         binomialMultiplication: 'Multiplicacao de binomios',
         perfectSquare: 'Quadrado perfeito',
         completeSquare: 'Completar quadrados'
+      },
+      expressionTypeDescriptions: {
+        integers: 'Operacoes com inteiros e sinais.',
+        zeroPairs: 'Identifique e use pares nulos.',
+        simpleEquations: 'Equacoes com uma variavel.',
+        twoSideEquations: 'Equacoes com dois lados.',
+        likeTerms: 'Simplifique termos semelhantes.',
+        distributive: 'Aplique a propriedade distributiva.',
+        areaProducts: 'Produtos por area e retangulos.',
+        binomialMultiplication: 'Multiplique binomios com blocos.',
+        perfectSquare: 'Reconheca quadrados perfeitos.',
+        completeSquare: 'Complete quadrados para fatorar.'
       },
       validation: {
         title: {
@@ -188,6 +201,7 @@ const resources = {
         zeroPair: 'Zero pair',
         deleteSelected: 'Delete selected',
         backToSelection: 'Back to selection',
+        selectedEquation: 'Selected equation:' ,
         undo: 'Undo',
         redo: 'Redo',
         check: 'Check result',
@@ -236,6 +250,18 @@ const resources = {
         binomialMultiplication: 'Binomial multiplication',
         perfectSquare: 'Perfect square',
         completeSquare: 'Complete the square'
+      },
+      expressionTypeDescriptions: {
+        integers: 'Work with signed integers.',
+        zeroPairs: 'Identify and use zero pairs.',
+        simpleEquations: 'One-variable equations.',
+        twoSideEquations: 'Two-sided equations.',
+        likeTerms: 'Combine like terms.',
+        distributive: 'Use the distributive property.',
+        areaProducts: 'Area products with rectangles.',
+        binomialMultiplication: 'Multiply binomials with tiles.',
+        perfectSquare: 'Recognize perfect squares.',
+        completeSquare: 'Complete squares to factor.'
       },
       validation: {
         title: {

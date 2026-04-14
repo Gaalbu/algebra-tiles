@@ -117,7 +117,7 @@ export function FactorScreen() {
 
   return (
     <section className="grid">
-      <div className="card">
+      <div className="card page-header">
         <h1>{t('factor.title')}</h1>
         <p>{t('factor.subtitle')}</p>
       </div>

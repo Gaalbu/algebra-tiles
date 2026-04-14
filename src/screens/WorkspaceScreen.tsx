@@ -15,6 +15,7 @@ import {
 } from '../utils/expression';
 import { GRID_CONFIG } from '../utils/grid';
 import { nextId } from '../utils/id';
+import { expressionTypes } from '../data/expressionTypes';
 
 export function WorkspaceScreen() {
   const { t } = useTranslation();
@@ -38,7 +39,12 @@ export function WorkspaceScreen() {
     (difficulty) => difficulty.id === state.selection.difficultyId
   );
   const selectedExpressionType = state.selection.expressionTypeId
-    ? t(`expressionTypes.${state.selection.expressionTypeId}`)
+    ? expressionTypes.find(
+        (type) => type.id === state.selection.expressionTypeId
+      )
+    : undefined;
+  const selectedExpressionLabel = selectedExpressionType
+    ? t(selectedExpressionType.labelKey)
     : '';
 
   const inventoryItems = useMemo<InventoryItem[]>(
@@ -55,7 +61,7 @@ export function WorkspaceScreen() {
 
   const counts = useMemo(() => countTiles(tiles), [tiles]);
   const expressionText = useMemo(() => buildExpression(counts), [counts]);
-  const target = selectedDifficulty?.target;
+  const target = selectedExpressionType?.target ?? selectedDifficulty?.target;
   const targetText = useMemo(
     () => (target ? buildExpression(target) : '-'),
     [target]
@@ -174,14 +180,19 @@ export function WorkspaceScreen() {
 
   return (
     <section className="grid">
-      <div className="card">
+      <div className="card page-header">
         <h1>{t('workspace.title')}</h1>
         <p>{t('workspace.subtitle')}</p>
         <p>
-          {selectedExpressionType ||
+          {selectedExpressionLabel ||
             (selectedSet ? t(selectedSet.titleKey) : '')}
           {selectedDifficulty ? ` / ${t(selectedDifficulty.labelKey)}` : ''}
         </p>
+        {selectedExpressionLabel && (
+          <div className="selection-chip">
+            <strong>{t('workspace.selectedEquation')}</strong> {selectedExpressionLabel}
+          </div>
+        )}
         <Link className="btn secondary" to="/equations">
           {t('workspace.backToSelection')}
         </Link>

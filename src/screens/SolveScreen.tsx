@@ -251,7 +251,7 @@ export function SolveScreen() {
 
   return (
     <section className="grid">
-      <div className="card">
+      <div className="card page-header">
         <h1>{t('solve.title')}</h1>
         <p>{t('solve.subtitle')}</p>
       </div>
