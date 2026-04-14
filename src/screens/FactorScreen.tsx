@@ -17,8 +17,8 @@ export function FactorScreen() {
 
   const inventoryItems = useMemo<InventoryItem[]>(
     () => [
-      { kind: 'x2', sign: 1, label: '+x^2' },
-      { kind: 'x2', sign: -1, label: '-x^2' },
+      { kind: 'x2', sign: 1, label: '+x²' },
+      { kind: 'x2', sign: -1, label: '-x²' },
       { kind: 'x', sign: 1, label: '+x' },
       { kind: 'x', sign: -1, label: '-x' },
       { kind: '1', sign: 1, label: '+1' },

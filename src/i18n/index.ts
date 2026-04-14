@@ -77,7 +77,7 @@ const resources = {
         times: 'x'
       },
       expression: {
-        placeholder: 'Digite a expressao (ex.: x^2 + 3x - 2)',
+        placeholder: 'Digite a expressao (ex.: x² + 3x - 2)',
         showSolution: 'Mostrar solucao em blocos',
         invalid: 'Expressao invalida',
         typeLabel: 'Tipo de expressao'
@@ -194,7 +194,7 @@ const resources = {
         times: 'x'
       },
       expression: {
-        placeholder: 'Type the expression (e.g. x^2 + 3x - 2)',
+        placeholder: 'Type the expression (e.g. x² + 3x - 2)',
         showSolution: 'Show solution as tiles',
         invalid: 'Invalid expression',
         typeLabel: 'Expression type'
