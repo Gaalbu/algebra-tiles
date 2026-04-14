@@ -31,6 +31,7 @@ export function WorkspaceScreen() {
     'idle'
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTargetIndex, setCurrentTargetIndex] = useState(0);
 
   const selectedSet = equationSets.find(
     (set) => set.id === state.selection.equationSetId
@@ -61,7 +62,8 @@ export function WorkspaceScreen() {
 
   const counts = useMemo(() => countTiles(tiles), [tiles]);
   const expressionText = useMemo(() => buildExpression(counts), [counts]);
-  const target = selectedExpressionType?.target ?? selectedDifficulty?.target;
+  const target = selectedExpressionType?.targets[currentTargetIndex]
+    ?? selectedDifficulty?.target;
   const targetText = useMemo(
     () => (target ? buildExpression(target) : '-'),
     [target]
@@ -70,6 +72,18 @@ export function WorkspaceScreen() {
   useEffect(() => {
     tilesRef.current = tiles;
   }, [tiles]);
+
+  useEffect(() => {
+    if (!selectedExpressionType) {
+      return;
+    }
+    const count = selectedExpressionType.targets.length;
+    if (count === 0) {
+      return;
+    }
+    const nextIndex = Math.floor(Math.random() * count);
+    setCurrentTargetIndex(nextIndex);
+  }, [selectedExpressionType?.id]);
 
   const updateTiles = (
     updater: (current: TileInstance[]) => TileInstance[],
@@ -140,6 +154,20 @@ export function WorkspaceScreen() {
     updateTiles(() => []);
     setValidation('idle');
     setSelectedIds([]);
+  };
+
+  const handleNextChallenge = () => {
+    if (selectedExpressionType && selectedExpressionType.targets.length > 0) {
+      const count = selectedExpressionType.targets.length;
+      let nextIndex = Math.floor(Math.random() * count);
+      if (count > 1) {
+        while (nextIndex === currentTargetIndex) {
+          nextIndex = Math.floor(Math.random() * count);
+        }
+      }
+      setCurrentTargetIndex(nextIndex);
+    }
+    handleClear();
   };
 
   const handleUndo = () => {
@@ -301,7 +329,7 @@ export function WorkspaceScreen() {
         onPrimary={() => {
           setIsModalOpen(false);
           if (validation === 'success') {
-            handleClear();
+            handleNextChallenge();
           }
         }}
       />
