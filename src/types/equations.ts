@@ -22,4 +22,5 @@ export type EquationSet = {
 export type SelectionState = {
   equationSetId?: string;
   difficultyId?: string;
+  expressionTypeId?: string;
 };

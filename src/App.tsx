@@ -14,7 +14,6 @@ export function App() {
   const { state } = useAppStore();
 
   const hasSet = Boolean(state.selection.equationSetId);
-  const hasDifficulty = Boolean(state.selection.difficultyId);
 
   return (
     <div>
@@ -54,16 +53,7 @@ export function App() {
               hasSet ? <DifficultySelectScreen /> : <Navigate to="/equations" />
             }
           />
-          <Route
-            path="/workspace"
-            element={
-              hasDifficulty ? (
-                <WorkspaceScreen />
-              ) : (
-                <Navigate to="/difficulty" />
-              )
-            }
-          />
+          <Route path="/workspace" element={<WorkspaceScreen />} />
           <Route path="/canvas-basico" element={<CanvasBasicoScreen />} />
           <Route path="/solve" element={<SolveScreen />} />
           <Route path="/factor" element={<FactorScreen />} />

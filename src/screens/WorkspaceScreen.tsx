@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { equationSets } from '../data/equations';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
@@ -36,6 +37,9 @@ export function WorkspaceScreen() {
   const selectedDifficulty = selectedSet?.difficulties.find(
     (difficulty) => difficulty.id === state.selection.difficultyId
   );
+  const selectedExpressionType = state.selection.expressionTypeId
+    ? t(`expressionTypes.${state.selection.expressionTypeId}`)
+    : '';
 
   const inventoryItems = useMemo<InventoryItem[]>(
     () => [
@@ -174,9 +178,13 @@ export function WorkspaceScreen() {
         <h1>{t('workspace.title')}</h1>
         <p>{t('workspace.subtitle')}</p>
         <p>
-          {selectedSet ? t(selectedSet.titleKey) : ''} /{' '}
-          {selectedDifficulty ? t(selectedDifficulty.labelKey) : ''}
+          {selectedExpressionType ||
+            (selectedSet ? t(selectedSet.titleKey) : '')}
+          {selectedDifficulty ? ` / ${t(selectedDifficulty.labelKey)}` : ''}
         </p>
+        <Link className="btn secondary" to="/equations">
+          {t('workspace.backToSelection')}
+        </Link>
       </div>
 
       <div className="workspace">

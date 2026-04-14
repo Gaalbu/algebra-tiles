@@ -33,8 +33,9 @@ const resources = {
         equationsDesc: 'Selecione desafios por nivel.'
       },
       equations: {
-        title: 'Selecao de equacoes',
-        subtitle: 'Escolha um conjunto para praticar'
+        title: 'Selecao de expressoes',
+        subtitle: 'Escolha um tipo para trabalhar',
+        selected: 'Selecionado:'
       },
       difficulty: {
         title: 'Selecione a dificuldade',
@@ -56,6 +57,7 @@ const resources = {
         clear: 'Limpar workspace',
         zeroPair: 'Zero pair',
         deleteSelected: 'Apagar selecionado',
+        backToSelection: 'Voltar para selecao',
         undo: 'Desfazer',
         redo: 'Refazer',
         check: 'Verificar resultado',
@@ -161,8 +163,9 @@ const resources = {
         equationsDesc: 'Pick challenges by level.'
       },
       equations: {
-        title: 'Equation selection',
-        subtitle: 'Pick a set to practice'
+        title: 'Expression selection',
+        subtitle: 'Pick a type to work with',
+        selected: 'Selected:'
       },
       difficulty: {
         title: 'Select difficulty',
@@ -184,6 +187,7 @@ const resources = {
         clear: 'Clear workspace',
         zeroPair: 'Zero pair',
         deleteSelected: 'Delete selected',
+        backToSelection: 'Back to selection',
         undo: 'Undo',
         redo: 'Redo',
         check: 'Check result',

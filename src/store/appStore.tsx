@@ -8,6 +8,7 @@ type AppState = {
 type AppAction =
   | { type: 'selectEquationSet'; payload: { equationSetId: string } }
   | { type: 'selectDifficulty'; payload: { difficultyId: string } }
+  | { type: 'selectExpressionType'; payload: { expressionTypeId: string } }
   | { type: 'resetSelection' };
 
 const initialState: AppState = {
@@ -29,6 +30,14 @@ function appReducer(state: AppState, action: AppAction): AppState {
         selection: {
           ...state.selection,
           difficultyId: action.payload.difficultyId
+        }
+      };
+    case 'selectExpressionType':
+      return {
+        ...state,
+        selection: {
+          ...state.selection,
+          expressionTypeId: action.payload.expressionTypeId
         }
       };
     case 'resetSelection':
