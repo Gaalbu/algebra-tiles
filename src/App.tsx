@@ -25,8 +25,6 @@ export function App() {
         <nav className="nav">
           <Link to="/">{t('nav.home')}</Link>
           <Link to="/equations">{t('nav.equations')}</Link>
-          <Link to="/difficulty">{t('nav.difficulty')}</Link>
-          <Link to="/workspace">{t('nav.workspace')}</Link>
           <Link to="/canvas-basico">{t('nav.canvasBasico')}</Link>
           <Link to="/solve">{t('nav.solve')}</Link>
           <Link to="/factor">{t('nav.factor')}</Link>

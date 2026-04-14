@@ -19,7 +19,18 @@ const resources = {
       home: {
         title: 'Aprenda com blocos algebricos',
         subtitle: 'Escolha um conjunto de equacoes e comece a montar.',
-        start: 'Iniciar agora'
+        start: 'Iniciar agora',
+        chooseTitle: 'Escolha a atividade',
+        chooseSubtitle: 'Selecione a pagina que deseja abrir.',
+        open: 'Abrir',
+        canvasBasicoTitle: 'Canvas basico',
+        canvasBasicoDesc: 'Monte blocos livremente e experimente expressoes.',
+        solveTitle: 'Solve',
+        solveDesc: 'Equacoes com dois lados e operacoes equivalentes.',
+        factorTitle: 'Factor',
+        factorDesc: 'Modelagem de area para fatoracao.',
+        equationsTitle: 'Equacoes',
+        equationsDesc: 'Selecione desafios por nivel.'
       },
       equations: {
         title: 'Selecao de equacoes',
@@ -136,7 +147,18 @@ const resources = {
       home: {
         title: 'Learn with algebra tiles',
         subtitle: 'Choose an equation set and start building.',
-        start: 'Start now'
+        start: 'Start now',
+        chooseTitle: 'Choose an activity',
+        chooseSubtitle: 'Select the page you want to open.',
+        open: 'Open',
+        canvasBasicoTitle: 'Basic canvas',
+        canvasBasicoDesc: 'Build freely and experiment with expressions.',
+        solveTitle: 'Solve',
+        solveDesc: 'Two-sided equations with equivalent operations.',
+        factorTitle: 'Factor',
+        factorDesc: 'Area modeling for factoring.',
+        equationsTitle: 'Equations',
+        equationsDesc: 'Pick challenges by level.'
       },
       equations: {
         title: 'Equation selection',
