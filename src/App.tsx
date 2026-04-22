@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HomeScreen } from './screens/HomeScreen';
@@ -8,18 +9,29 @@ import { CanvasBasicoScreen } from './screens/CanvasBasicoScreen';
 import { SolveScreen } from './screens/SolveScreen';
 import { FactorScreen } from './screens/FactorScreen';
 import { useAppStore } from './store/appStore';
+import { LegendModal } from './components/LegendModal';
 
 export function App() {
   const { t, i18n } = useTranslation();
   const { state } = useAppStore();
+  const [isLegendOpen, setIsLegendOpen] = useState(false);
 
   const hasSet = Boolean(state.selection.equationSetId);
 
   return (
     <div>
       <header className="header">
-        <div>
+        <div className="header-title">
           <strong>{t('app.title')}</strong>
+          <button
+            className="icon-button"
+            type="button"
+            onClick={() => setIsLegendOpen(true)}
+            aria-label="Legenda"
+            title="Legenda"
+          >
+            ?
+          </button>
         </div>
         <nav className="nav">
           <Link to="/">{t('nav.home')}</Link>
@@ -60,6 +72,7 @@ export function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
+      <LegendModal isOpen={isLegendOpen} onClose={() => setIsLegendOpen(false)} />
     </div>
   );
 }
