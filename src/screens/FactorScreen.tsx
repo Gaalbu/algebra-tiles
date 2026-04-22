@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { ContextMenu } from '../components/ContextMenu';
 import { INVENTORY_ITEMS } from '../data/tiles';
 import { InventoryItem, TileInstance } from '../types/tiles';
 import { applyZeroPairs } from '../utils/expression';
@@ -15,6 +16,11 @@ export function FactorScreen() {
   const [history, setHistory] = useState<TileInstance[][]>([]);
   const [future, setFuture] = useState<TileInstance[][]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [contextMenu, setContextMenu] = useState({
+    isOpen: false,
+    x: 0,
+    y: 0
+  });
 
   const inventoryItems = INVENTORY_ITEMS;
 
@@ -103,6 +109,47 @@ export function FactorScreen() {
     setSelectedIds([]);
   };
 
+  const openContextMenu = (position: { x: number; y: number }) => {
+    setContextMenu({ isOpen: true, x: position.x, y: position.y });
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu((current) => ({ ...current, isOpen: false }));
+  };
+
+  const contextMenuItems = [
+    {
+      id: 'clear',
+      label: t('workspace.clear'),
+      onSelect: handleClear,
+      disabled: tiles.length === 0
+    },
+    {
+      id: 'zero-pair',
+      label: t('workspace.zeroPair'),
+      onSelect: handleZeroPairs,
+      disabled: selectedIds.length === 0
+    },
+    {
+      id: 'delete',
+      label: t('workspace.deleteSelected'),
+      onSelect: handleDeleteSelected,
+      disabled: selectedIds.length === 0
+    },
+    {
+      id: 'undo',
+      label: t('workspace.undo'),
+      onSelect: handleUndo,
+      disabled: history.length === 0
+    },
+    {
+      id: 'redo',
+      label: t('workspace.redo'),
+      onSelect: handleRedo,
+      disabled: future.length === 0
+    }
+  ];
+
   const gapPreview = factorization.gaps.slice(0, 8);
   const overlapPreview = factorization.overlaps.slice(0, 8);
 
@@ -141,6 +188,7 @@ export function FactorScreen() {
                 selectedIds={selectedIds}
                 onSelectionChange={setSelectedIds}
                 onInventoryDrop={handleAddTile}
+                onContextMenu={openContextMenu}
               />
             </div>
           </div>
@@ -151,44 +199,6 @@ export function FactorScreen() {
       </div>
 
       <div className="grid two">
-        <div className="panel">
-          <strong>{t('workspace.tools')}</strong>
-          <div className="grid">
-            <button
-              className="btn secondary"
-              onClick={handleClear}
-            >
-              {t('workspace.clear')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleZeroPairs}
-            >
-              {t('workspace.zeroPair')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleDeleteSelected}
-              disabled={selectedIds.length === 0}
-            >
-              {t('workspace.deleteSelected')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleUndo}
-              disabled={history.length === 0}
-            >
-              {t('workspace.undo')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleRedo}
-              disabled={future.length === 0}
-            >
-              {t('workspace.redo')}
-            </button>
-          </div>
-        </div>
         <div className="panel">
           <strong>{t('factor.resultLabel')}</strong>
           {factorization.isRect && factorization.factors ? (
@@ -217,6 +227,13 @@ export function FactorScreen() {
           )}
         </div>
       </div>
+      <ContextMenu
+        isOpen={contextMenu.isOpen}
+        x={contextMenu.x}
+        y={contextMenu.y}
+        items={contextMenuItems}
+        onClose={closeContextMenu}
+      />
     </section>
   );
 }

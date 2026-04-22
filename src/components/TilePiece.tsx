@@ -5,9 +5,15 @@ type TilePieceProps = {
   tile: TileInstance;
   isSelected?: boolean;
   onPointerDown: (event: React.PointerEvent<HTMLDivElement>) => void;
+  onContextMenu?: (event: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export function TilePiece({ tile, isSelected, onPointerDown }: TilePieceProps) {
+export function TilePiece({
+  tile,
+  isSelected,
+  onPointerDown,
+  onContextMenu
+}: TilePieceProps) {
   const size = getTileSize(tile);
   const pxWidth = size.width * GRID_CONFIG.cellSize;
   const pxHeight = size.height * GRID_CONFIG.cellSize;
@@ -25,6 +31,7 @@ export function TilePiece({ tile, isSelected, onPointerDown }: TilePieceProps) {
         height: pxHeight
       }}
       onPointerDown={onPointerDown}
+      onContextMenu={onContextMenu}
     >
       <span>{`${sign}${label}`}</span>
     </div>

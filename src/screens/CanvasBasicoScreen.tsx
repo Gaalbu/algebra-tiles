@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { ContextMenu } from '../components/ContextMenu';
 import { INVENTORY_ITEMS } from '../data/tiles';
 import { InventoryItem, TileInstance } from '../types/tiles';
 import {
@@ -24,6 +25,11 @@ export function CanvasBasicoScreen() {
   const [manualSnapshot, setManualSnapshot] = useState<TileInstance[] | null>(
     null
   );
+  const [contextMenu, setContextMenu] = useState({
+    isOpen: false,
+    x: 0,
+    y: 0
+  });
 
   const inventoryItems = INVENTORY_ITEMS;
 
@@ -154,6 +160,50 @@ export function CanvasBasicoScreen() {
     setSelectedIds([]);
   };
 
+  const openContextMenu = (position: { x: number; y: number }) => {
+    if (showSolution) {
+      return;
+    }
+    setContextMenu({ isOpen: true, x: position.x, y: position.y });
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu((current) => ({ ...current, isOpen: false }));
+  };
+
+  const contextMenuItems = [
+    {
+      id: 'clear',
+      label: t('workspace.clear'),
+      onSelect: handleClear,
+      disabled: showSolution || tiles.length === 0
+    },
+    {
+      id: 'zero-pair',
+      label: t('workspace.zeroPair'),
+      onSelect: handleZeroPairs,
+      disabled: showSolution || selectedIds.length === 0
+    },
+    {
+      id: 'delete',
+      label: t('workspace.deleteSelected'),
+      onSelect: handleDeleteSelected,
+      disabled: showSolution || selectedIds.length === 0
+    },
+    {
+      id: 'undo',
+      label: t('workspace.undo'),
+      onSelect: handleUndo,
+      disabled: showSolution || history.length === 0
+    },
+    {
+      id: 'redo',
+      label: t('workspace.redo'),
+      onSelect: handleRedo,
+      disabled: showSolution || future.length === 0
+    }
+  ];
+
   const parseError =
     showSolution && parseResult?.error ? t('expression.invalid') : '';
 
@@ -201,6 +251,7 @@ export function CanvasBasicoScreen() {
               onSelectionChange={setSelectedIds}
               isInteractive={!showSolution}
               onInventoryDrop={showSolution ? undefined : handleAddTile}
+              onContextMenu={openContextMenu}
             />
           </div>
           <p className="hint">
@@ -211,50 +262,17 @@ export function CanvasBasicoScreen() {
 
       <div className="grid two">
         <div className="panel">
-          <strong>{t('workspace.tools')}</strong>
-          <div className="grid">
-            <button
-              className="btn secondary"
-              onClick={handleClear}
-              disabled={showSolution}
-            >
-              {t('workspace.clear')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleZeroPairs}
-              disabled={showSolution}
-            >
-              {t('workspace.zeroPair')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleDeleteSelected}
-              disabled={showSolution || selectedIds.length === 0}
-            >
-              {t('workspace.deleteSelected')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleUndo}
-              disabled={history.length === 0 || showSolution}
-            >
-              {t('workspace.undo')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleRedo}
-              disabled={future.length === 0 || showSolution}
-            >
-              {t('workspace.redo')}
-            </button>
-          </div>
-        </div>
-        <div className="panel">
           <strong>{t('workspace.expression')}</strong>
           <p>{expressionText}</p>
         </div>
       </div>
+      <ContextMenu
+        isOpen={contextMenu.isOpen}
+        x={contextMenu.x}
+        y={contextMenu.y}
+        items={contextMenuItems}
+        onClose={closeContextMenu}
+      />
     </section>
   );
 }

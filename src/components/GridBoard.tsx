@@ -12,12 +12,21 @@ type GridBoardProps = {
   onInventoryDrop?: (item: InventoryItem, x: number, y: number) => void;
   onDragStart?: (tileId: string) => void;
   onDragEnd?: (tileId: string) => void;
+  onContextMenu?: (position: { x: number; y: number }, tileId?: string) => void;
 };
 
 type DragState = {
   id: string;
   offsetX: number;
   offsetY: number;
+  pointerId: number;
+};
+
+type SelectionBox = {
+  startX: number;
+  startY: number;
+  currentX: number;
+  currentY: number;
   pointerId: number;
 };
 
@@ -29,15 +38,35 @@ export function GridBoard({
   isInteractive = true,
   onInventoryDrop,
   onDragStart,
-  onDragEnd
+  onDragEnd,
+  onContextMenu
 }: GridBoardProps) {
   const boardRef = useRef<HTMLDivElement>(null);
   const [dragState, setDragState] = useState<DragState | null>(null);
+  const [selectionBox, setSelectionBox] = useState<SelectionBox | null>(null);
 
   const boardWidth = GRID_CONFIG.columns * GRID_CONFIG.cellSize;
   const boardHeight = GRID_CONFIG.rows * GRID_CONFIG.cellSize;
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (selectionBox && event.pointerId === selectionBox.pointerId) {
+      const board = boardRef.current;
+      if (!board) {
+        return;
+      }
+      const rect = board.getBoundingClientRect();
+      setSelectionBox((current) =>
+        current
+          ? {
+              ...current,
+              currentX: event.clientX - rect.left,
+              currentY: event.clientY - rect.top
+            }
+          : current
+      );
+      return;
+    }
+
     if (!isInteractive || !dragState || event.pointerId !== dragState.pointerId) {
       return;
     }
@@ -71,6 +100,20 @@ export function GridBoard({
   };
 
   const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (selectionBox && event.pointerId === selectionBox.pointerId) {
+      const rect = normalizeRect(selectionBox);
+      const hasArea = rect.width >= 4 && rect.height >= 4;
+      if (hasArea) {
+        const nextSelection = tiles
+          .filter((tile) => intersects(rect, tile))
+          .map((tile) => tile.id);
+        onSelectionChange(nextSelection);
+      } else {
+        onSelectionChange([]);
+      }
+      setSelectionBox(null);
+      return;
+    }
     if (dragState && event.pointerId === dragState.pointerId) {
       onDragEnd?.(dragState.id);
       setDragState(null);
@@ -120,15 +163,35 @@ export function GridBoard({
   const handleBoardPointerDown = (
     event: React.PointerEvent<HTMLDivElement>
   ) => {
+    if (event.button !== 0) {
+      return;
+    }
     if (event.currentTarget !== event.target) {
       return;
     }
-    onSelectionChange([]);
+    if (!isInteractive) {
+      return;
+    }
+    const board = boardRef.current;
+    if (!board) {
+      return;
+    }
+    const rect = board.getBoundingClientRect();
+    const startX = event.clientX - rect.left;
+    const startY = event.clientY - rect.top;
+    setSelectionBox({
+      startX,
+      startY,
+      currentX: startX,
+      currentY: startY,
+      pointerId: event.pointerId
+    });
+    event.currentTarget.setPointerCapture(event.pointerId);
   };
 
-  const handleTilePointerDown = (
+  const updateSelection = (
     tileId: string,
-    event: React.PointerEvent<HTMLDivElement>
+    event: { shiftKey: boolean; ctrlKey: boolean; metaKey: boolean }
   ) => {
     const isMulti = event.shiftKey || event.ctrlKey || event.metaKey;
     if (isMulti) {
@@ -137,9 +200,21 @@ export function GridBoard({
       } else {
         onSelectionChange([...selectedIds, tileId]);
       }
-    } else if (!selectedIds.includes(tileId) || selectedIds.length > 1) {
+      return;
+    }
+    if (!selectedIds.includes(tileId) || selectedIds.length > 1) {
       onSelectionChange([tileId]);
     }
+  };
+
+  const handleTilePointerDown = (
+    tileId: string,
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    if (event.button !== 0) {
+      return;
+    }
+    updateSelection(tileId, event);
 
     if (!isInteractive) {
       return;
@@ -169,6 +244,32 @@ export function GridBoard({
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
+  const handleBoardContextMenu = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!onContextMenu) {
+      return;
+    }
+    if (event.currentTarget !== event.target) {
+      return;
+    }
+    event.preventDefault();
+    onContextMenu({ x: event.clientX, y: event.clientY });
+  };
+
+  const handleTileContextMenu = (
+    tileId: string,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    if (!onContextMenu) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    if (selectedIds.length === 0) {
+      onSelectionChange([tileId]);
+    }
+    onContextMenu({ x: event.clientX, y: event.clientY }, tileId);
+  };
+
   return (
     <div
       ref={boardRef}
@@ -180,7 +281,14 @@ export function GridBoard({
       onPointerLeave={handlePointerUp}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
+      onContextMenu={handleBoardContextMenu}
     >
+      {selectionBox && (
+        <div
+          className="selection-rect"
+          style={normalizeRect(selectionBox)}
+        />
+      )}
       {tiles.map((tile) => {
         const size = getTileSize(tile);
         const left = tile.x * GRID_CONFIG.cellSize;
@@ -202,10 +310,38 @@ export function GridBoard({
               tile={tile}
               isSelected={isSelected}
               onPointerDown={(event) => handleTilePointerDown(tile.id, event)}
+              onContextMenu={(event) => handleTileContextMenu(tile.id, event)}
             />
           </div>
         );
       })}
     </div>
+  );
+}
+
+function normalizeRect(selection: SelectionBox) {
+  const left = Math.min(selection.startX, selection.currentX);
+  const top = Math.min(selection.startY, selection.currentY);
+  const width = Math.abs(selection.currentX - selection.startX);
+  const height = Math.abs(selection.currentY - selection.startY);
+  return { left, top, width, height };
+}
+
+function intersects(
+  rect: { left: number; top: number; width: number; height: number },
+  tile: TileInstance
+) {
+  const size = getTileSize(tile);
+  const left = tile.x * GRID_CONFIG.cellSize;
+  const top = tile.y * GRID_CONFIG.cellSize;
+  const right = left + size.width * GRID_CONFIG.cellSize;
+  const bottom = top + size.height * GRID_CONFIG.cellSize;
+  const rectRight = rect.left + rect.width;
+  const rectBottom = rect.top + rect.height;
+  return (
+    rect.left < right &&
+    rectRight > left &&
+    rect.top < bottom &&
+    rectBottom > top
   );
 }

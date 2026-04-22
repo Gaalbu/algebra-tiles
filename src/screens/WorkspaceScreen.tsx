@@ -5,6 +5,7 @@ import { equationSets } from '../data/equations';
 import { INVENTORY_ITEMS } from '../data/tiles';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { ContextMenu } from '../components/ContextMenu';
 import { ResultModal } from '../components/ResultModal';
 import { useAppStore } from '../store/appStore';
 import { InventoryItem, TileInstance } from '../types/tiles';
@@ -33,6 +34,11 @@ export function WorkspaceScreen() {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTargetIndex, setCurrentTargetIndex] = useState(0);
+  const [contextMenu, setContextMenu] = useState({
+    isOpen: false,
+    x: 0,
+    y: 0
+  });
 
   const selectedSet = equationSets.find(
     (set) => set.id === state.selection.equationSetId
@@ -147,6 +153,15 @@ export function WorkspaceScreen() {
     setSelectedIds([]);
   };
 
+  const handleCheck = () => {
+    if (!target) {
+      return;
+    }
+    const nextValidation = isMatch(counts, target) ? 'success' : 'fail';
+    setValidation(nextValidation);
+    setIsModalOpen(true);
+  };
+
   const handleNextChallenge = () => {
     if (selectedExpressionType && selectedExpressionType.targets.length > 0) {
       const count = selectedExpressionType.targets.length;
@@ -197,6 +212,53 @@ export function WorkspaceScreen() {
     setSelectedIds([]);
   };
 
+  const openContextMenu = (position: { x: number; y: number }) => {
+    setContextMenu({ isOpen: true, x: position.x, y: position.y });
+  };
+
+  const closeContextMenu = () => {
+    setContextMenu((current) => ({ ...current, isOpen: false }));
+  };
+
+  const contextMenuItems = [
+    {
+      id: 'clear',
+      label: t('workspace.clear'),
+      onSelect: handleClear,
+      disabled: tiles.length === 0
+    },
+    {
+      id: 'zero-pair',
+      label: t('workspace.zeroPair'),
+      onSelect: handleZeroPairs,
+      disabled: selectedIds.length === 0
+    },
+    {
+      id: 'delete',
+      label: t('workspace.deleteSelected'),
+      onSelect: handleDeleteSelected,
+      disabled: selectedIds.length === 0
+    },
+    {
+      id: 'undo',
+      label: t('workspace.undo'),
+      onSelect: handleUndo,
+      disabled: history.length === 0
+    },
+    {
+      id: 'redo',
+      label: t('workspace.redo'),
+      onSelect: handleRedo,
+      disabled: future.length === 0
+    },
+    {
+      id: 'check',
+      label: t('workspace.check'),
+      onSelect: handleCheck,
+      disabled: !target
+    }
+  ];
+
   return (
     <section className="grid">
       <div className="card page-header">
@@ -237,6 +299,7 @@ export function WorkspaceScreen() {
               onInventoryDrop={handleAddTile}
               onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
+              onContextMenu={openContextMenu}
             />
           </div>
           <p className="hint">
@@ -247,63 +310,16 @@ export function WorkspaceScreen() {
 
       <div className="grid two">
         <div className="panel">
-          <strong>{t('workspace.tools')}</strong>
-          <div className="grid">
-            <button className="btn secondary" onClick={handleClear}>
-              {t('workspace.clear')}
-            </button>
-            <button className="btn secondary" onClick={handleZeroPairs}>
-              {t('workspace.zeroPair')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleDeleteSelected}
-              disabled={selectedIds.length === 0}
-            >
-              {t('workspace.deleteSelected')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleUndo}
-              disabled={history.length === 0}
-            >
-              {t('workspace.undo')}
-            </button>
-            <button
-              className="btn secondary"
-              onClick={handleRedo}
-              disabled={future.length === 0}
-            >
-              {t('workspace.redo')}
-            </button>
-            <button
-              className="btn"
-              onClick={() => {
-                if (!target) {
-                  return;
-                }
-                const nextValidation = isMatch(counts, target)
-                  ? 'success'
-                  : 'fail';
-                setValidation(nextValidation);
-                setIsModalOpen(true);
-              }}
-            >
-              {t('workspace.check')}
-            </button>
-          </div>
-          {validation !== 'idle' && (
-            <div className={`result ${validation}`}>
-              {t(`validation.${validation}`)}
-            </div>
-          )}
-        </div>
-        <div className="panel">
           <strong>{t('workspace.expression')}</strong>
           <p>{expressionText}</p>
           <p className="hint">
             {t('workspace.target')}: {targetText}
           </p>
+          {validation !== 'idle' && (
+            <div className={`result ${validation}`}>
+              {t(`validation.${validation}`)}
+            </div>
+          )}
         </div>
       </div>
       <ResultModal
@@ -323,6 +339,13 @@ export function WorkspaceScreen() {
             handleNextChallenge();
           }
         }}
+      />
+      <ContextMenu
+        isOpen={contextMenu.isOpen}
+        x={contextMenu.x}
+        y={contextMenu.y}
+        items={contextMenuItems}
+        onClose={closeContextMenu}
       />
     </section>
   );
