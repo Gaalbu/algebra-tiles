@@ -25,7 +25,7 @@ export function TilePiece({
     <div
       className={`tile tile-${tile.kind} ${tile.sign === 1 ? 'pos' : 'neg'} ${
         isSelected ? 'selected' : ''
-      }`}
+      } ${tile.kind === 'x' && tile.orientation === 'vertical' ? 'vertical' : ''}`}
       style={{
         width: pxWidth,
         height: pxHeight

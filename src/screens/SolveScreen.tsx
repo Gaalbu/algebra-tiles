@@ -11,7 +11,7 @@ import {
   countTiles,
   parseExpression
 } from '../utils/expression';
-import { GRID_CONFIG, layoutTiles } from '../utils/grid';
+import { clamp, getTileSize, GRID_CONFIG, layoutTiles } from '../utils/grid';
 import { nextId } from '../utils/id';
 
 type TilePairState = {
@@ -229,6 +229,37 @@ export function SolveScreen() {
     setSelectedRightIds([]);
   };
 
+  const handleRotateSelected = () => {
+    if (showSolution) {
+      return;
+    }
+    const leftSet = new Set(selectedLeftIds);
+    const rightSet = new Set(selectedRightIds);
+    updatePairTiles((current) => ({
+      left: current.left.map((tile) => rotateTileIfNeeded(tile, leftSet)),
+      right: current.right.map((tile) => rotateTileIfNeeded(tile, rightSet))
+    }));
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (showSolution || event.key.toLowerCase() !== 'r') {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        return;
+      }
+      if (selectedLeftIds.length === 0 && selectedRightIds.length === 0) {
+        return;
+      }
+      event.preventDefault();
+      handleRotateSelected();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showSolution, selectedLeftIds, selectedRightIds]);
+
   const openContextMenu = (position: { x: number; y: number }) => {
     if (showSolution) {
       return;
@@ -255,6 +286,17 @@ export function SolveScreen() {
       label: t('workspace.zeroPair'),
       onSelect: handleZeroPairs,
       disabled: showSolution || !hasSelection
+    },
+    {
+      id: 'rotate',
+      label: t('workspace.rotate'),
+      onSelect: handleRotateSelected,
+      disabled:
+        showSolution ||
+        ![
+          ...selectedLeftIds.map((id) => leftTiles.find((tile) => tile.id === id)),
+          ...selectedRightIds.map((id) => rightTiles.find((tile) => tile.id === id))
+        ].some((tile) => tile?.kind === 'x')
     },
     {
       id: 'delete',
@@ -388,4 +430,21 @@ function buildTiles(counts: { x2: number; x: number; one: number }) {
   pushTiles('1', Math.abs(counts.one), counts.one >= 0 ? 1 : -1);
 
   return tiles;
+}
+
+function rotateTileIfNeeded(tile: TileInstance, selectedIds: Set<string>) {
+  if (!selectedIds.has(tile.id) || tile.kind !== 'x') {
+    return tile;
+  }
+  const nextOrientation: TileInstance['orientation'] =
+    tile.orientation === 'vertical' ? 'horizontal' : 'vertical';
+  const size = getTileSize({ kind: tile.kind, orientation: nextOrientation });
+  const maxX = GRID_CONFIG.columns - size.width;
+  const maxY = GRID_CONFIG.rows - size.height;
+  return {
+    ...tile,
+    orientation: nextOrientation,
+    x: clamp(tile.x, 0, maxX),
+    y: clamp(tile.y, 0, maxY)
+  };
 }

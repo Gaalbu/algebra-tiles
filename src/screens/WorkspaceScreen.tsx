@@ -15,7 +15,7 @@ import {
   countTiles,
   isMatch
 } from '../utils/expression';
-import { GRID_CONFIG } from '../utils/grid';
+import { clamp, getTileSize, GRID_CONFIG } from '../utils/grid';
 import { nextId } from '../utils/id';
 import { expressionTypes } from '../data/expressionTypes';
 
@@ -203,6 +203,49 @@ export function WorkspaceScreen() {
     setSelectedIds([]);
   };
 
+  const handleRotateSelected = () => {
+    if (selectedIds.length === 0) {
+      return;
+    }
+    updateTiles((current) =>
+      current.map((tile) => {
+        if (!selectedIds.includes(tile.id) || tile.kind !== 'x') {
+          return tile;
+        }
+        const nextOrientation =
+          tile.orientation === 'vertical' ? 'horizontal' : 'vertical';
+        const size = getTileSize({ kind: tile.kind, orientation: nextOrientation });
+        const maxX = GRID_CONFIG.columns - size.width;
+        const maxY = GRID_CONFIG.rows - size.height;
+        return {
+          ...tile,
+          orientation: nextOrientation,
+          x: clamp(tile.x, 0, maxX),
+          y: clamp(tile.y, 0, maxY)
+        };
+      })
+    );
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() !== 'r') {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        return;
+      }
+      if (selectedIds.length === 0) {
+        return;
+      }
+      event.preventDefault();
+      handleRotateSelected();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIds]);
+
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
       return;
@@ -232,6 +275,15 @@ export function WorkspaceScreen() {
       label: t('workspace.zeroPair'),
       onSelect: handleZeroPairs,
       disabled: selectedIds.length === 0
+    },
+    {
+      id: 'rotate',
+      label: t('workspace.rotate'),
+      onSelect: handleRotateSelected,
+      disabled: !selectedIds.some((id) => {
+        const tile = tiles.find((item) => item.id === id);
+        return tile?.kind === 'x';
+      })
     },
     {
       id: 'delete',

@@ -376,6 +376,17 @@ button:disabled {
   background: var(--tile-quad-neg);
 }
 
+.tile.tile-x.vertical {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(12, 30, 36, 0.2) 0,
+    rgba(12, 30, 36, 0.2) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  background-blend-mode: multiply;
+}
+
 .result {
   border-radius: 10px;
   padding: 10px 12px;

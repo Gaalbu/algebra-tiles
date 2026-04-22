@@ -11,7 +11,7 @@ import {
   countTiles,
   parseExpression
 } from '../utils/expression';
-import { GRID_CONFIG, layoutTiles } from '../utils/grid';
+import { clamp, getTileSize, GRID_CONFIG, layoutTiles } from '../utils/grid';
 import { nextId } from '../utils/id';
 
 export function CanvasBasicoScreen() {
@@ -160,6 +160,49 @@ export function CanvasBasicoScreen() {
     setSelectedIds([]);
   };
 
+  const handleRotateSelected = () => {
+    if (showSolution || selectedIds.length === 0) {
+      return;
+    }
+    updateTiles((current) =>
+      current.map((tile) => {
+        if (!selectedIds.includes(tile.id) || tile.kind !== 'x') {
+          return tile;
+        }
+        const nextOrientation =
+          tile.orientation === 'vertical' ? 'horizontal' : 'vertical';
+        const size = getTileSize({ kind: tile.kind, orientation: nextOrientation });
+        const maxX = GRID_CONFIG.columns - size.width;
+        const maxY = GRID_CONFIG.rows - size.height;
+        return {
+          ...tile,
+          orientation: nextOrientation,
+          x: clamp(tile.x, 0, maxX),
+          y: clamp(tile.y, 0, maxY)
+        };
+      })
+    );
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (showSolution || event.key.toLowerCase() !== 'r') {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        return;
+      }
+      if (selectedIds.length === 0) {
+        return;
+      }
+      event.preventDefault();
+      handleRotateSelected();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showSolution, selectedIds]);
+
   const openContextMenu = (position: { x: number; y: number }) => {
     if (showSolution) {
       return;
@@ -183,6 +226,17 @@ export function CanvasBasicoScreen() {
       label: t('workspace.zeroPair'),
       onSelect: handleZeroPairs,
       disabled: showSolution || selectedIds.length === 0
+    },
+    {
+      id: 'rotate',
+      label: t('workspace.rotate'),
+      onSelect: handleRotateSelected,
+      disabled:
+        showSolution ||
+        !selectedIds.some((id) => {
+          const tile = tiles.find((item) => item.id === id);
+          return tile?.kind === 'x';
+        })
     },
     {
       id: 'delete',
