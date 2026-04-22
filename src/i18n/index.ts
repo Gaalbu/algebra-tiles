@@ -14,7 +14,7 @@ const resources = {
         workspace: 'Workspace',
         canvasBasico: 'Canvas básico',
         solve: 'Solve',
-        factor: 'Factor'
+        factor: 'Fatoração'
       },
       home: {
         title: 'Aprenda com blocos algébricos',
@@ -27,7 +27,7 @@ const resources = {
         canvasBasicoDesc: 'Monte blocos livremente e experimente expressoes.',
         solveTitle: 'Solve',
         solveDesc: 'Equações com dois lados e operações equivalentes.',
-        factorTitle: 'Factor',
+        factorTitle: 'Fatoração',
         factorDesc: 'Modelagem de área para fatoração.',
         equationsTitle: 'Equações',
         equationsDesc: 'Selecione desafios por nível.'
@@ -78,7 +78,7 @@ const resources = {
         summary: 'Resumo da equação'
       },
       factor: {
-        title: 'Factor',
+        title: 'Fatoração',
         subtitle: 'Modele a área para fatorar polinômios.',
         gridLabel: 'Área de fatoração',
         resultLabel: 'Resultado',

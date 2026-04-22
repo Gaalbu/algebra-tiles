@@ -211,15 +211,8 @@ export function FactorScreen() {
         <h1>{t('factor.title')}</h1>
         <p>{t('factor.subtitle')}</p>
       </div>
-
-      <div className="panel controls">
-        <div className="controls-row">
-          <span className="hint">{t('factor.autoHint')}</span>
-        </div>
-      </div>
-
       <div className="workspace">
-        <div className="panel">
+        <div className="panel inventory-panel">
           <strong>{t('workspace.inventory')}</strong>
           <InventoryPanel items={inventoryItems} />
         </div>
