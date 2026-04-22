@@ -18,7 +18,9 @@ export function InventoryPanel({
       {items.map((item) => (
         <button
           key={`${item.kind}-${item.sign}`}
-          className={`inventory-item ${item.sign === 1 ? 'pos' : 'neg'}`}
+          className={`inventory-item tile-${item.kind} ${
+            item.sign === 1 ? 'pos' : 'neg'
+          }`}
           draggable={!disabled}
           onDragStart={(event) => {
             event.dataTransfer.setData(

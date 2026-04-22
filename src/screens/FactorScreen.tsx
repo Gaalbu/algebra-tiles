@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { INVENTORY_ITEMS } from '../data/tiles';
 import { InventoryItem, TileInstance } from '../types/tiles';
 import { applyZeroPairs } from '../utils/expression';
 import { GRID_CONFIG } from '../utils/grid';
@@ -15,17 +16,7 @@ export function FactorScreen() {
   const [future, setFuture] = useState<TileInstance[][]>([]);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  const inventoryItems = useMemo<InventoryItem[]>(
-    () => [
-      { kind: 'x2', sign: 1, label: '+x²' },
-      { kind: 'x2', sign: -1, label: '-x²' },
-      { kind: 'x', sign: 1, label: '+x' },
-      { kind: 'x', sign: -1, label: '-x' },
-      { kind: '1', sign: 1, label: '+1' },
-      { kind: '1', sign: -1, label: '-1' }
-    ],
-    []
-  );
+  const inventoryItems = INVENTORY_ITEMS;
 
   const factorization = useMemo(() => detectFactorization(tiles), [tiles]);
 

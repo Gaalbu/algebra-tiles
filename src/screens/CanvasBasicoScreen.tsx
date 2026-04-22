@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
+import { INVENTORY_ITEMS } from '../data/tiles';
 import { InventoryItem, TileInstance } from '../types/tiles';
 import {
   applyZeroPairs,
@@ -38,17 +39,7 @@ export function CanvasBasicoScreen() {
   );
   const [expressionType, setExpressionType] = useState(EXPRESSION_TYPES[0]);
 
-  const inventoryItems = useMemo<InventoryItem[]>(
-    () => [
-      { kind: 'x2', sign: 1, label: '+x²' },
-      { kind: 'x2', sign: -1, label: '-x²' },
-      { kind: 'x', sign: 1, label: '+x' },
-      { kind: 'x', sign: -1, label: '-x' },
-      { kind: '1', sign: 1, label: '+1' },
-      { kind: '1', sign: -1, label: '-1' }
-    ],
-    []
-  );
+  const inventoryItems = INVENTORY_ITEMS;
 
   const counts = useMemo(() => countTiles(tiles), [tiles]);
   const expressionText = useMemo(() => buildExpression(counts), [counts]);

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { TILE_LEGEND } from '../data/tiles';
 
 export function HomeScreen() {
   const { t } = useTranslation();
@@ -9,6 +10,39 @@ export function HomeScreen() {
       <div className="card page-header">
         <h1>{t('home.chooseTitle')}</h1>
         <p>{t('home.chooseSubtitle')}</p>
+      </div>
+      <div className="card tile-legend">
+        <h2>Representacao das pecas</h2>
+        <div className="legend-table-wrapper">
+          <table className="legend-table">
+            <thead>
+              <tr>
+                <th>Peca</th>
+                <th>Dimensoes</th>
+                <th>Representacao</th>
+                <th>Leitura didatica</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TILE_LEGEND.map((entry) => (
+                <tr key={entry.id}>
+                  <td>
+                    <div className="legend-piece">
+                      <span
+                        className={`legend-swatch ${entry.swatchClass ?? 'muted'}`}
+                        aria-hidden="true"
+                      />
+                      <span>{entry.name}</span>
+                    </div>
+                  </td>
+                  <td>{entry.dimensions}</td>
+                  <td>{entry.representation}</td>
+                  <td>{entry.reading}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="grid two">
         <div className="card">

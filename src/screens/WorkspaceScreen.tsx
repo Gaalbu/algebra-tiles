@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { equationSets } from '../data/equations';
+import { INVENTORY_ITEMS } from '../data/tiles';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
 import { ResultModal } from '../components/ResultModal';
@@ -48,17 +49,7 @@ export function WorkspaceScreen() {
     ? t(selectedExpressionType.labelKey)
     : '';
 
-  const inventoryItems = useMemo<InventoryItem[]>(
-    () => [
-      { kind: 'x2', sign: 1, label: '+x²' },
-      { kind: 'x2', sign: -1, label: '-x²' },
-      { kind: 'x', sign: 1, label: '+x' },
-      { kind: 'x', sign: -1, label: '-x' },
-      { kind: '1', sign: 1, label: '+1' },
-      { kind: '1', sign: -1, label: '-1' }
-    ],
-    []
-  );
+  const inventoryItems = INVENTORY_ITEMS;
 
   const counts = useMemo(() => countTiles(tiles), [tiles]);
   const expressionText = useMemo(() => buildExpression(counts), [counts]);
