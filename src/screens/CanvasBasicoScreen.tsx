@@ -13,19 +13,6 @@ import {
 import { GRID_CONFIG, layoutTiles } from '../utils/grid';
 import { nextId } from '../utils/id';
 
-const EXPRESSION_TYPES = [
-  'integers',
-  'zeroPairs',
-  'simpleEquations',
-  'twoSideEquations',
-  'likeTerms',
-  'distributive',
-  'areaProducts',
-  'binomialMultiplication',
-  'perfectSquare',
-  'completeSquare'
-];
-
 export function CanvasBasicoScreen() {
   const { t } = useTranslation();
   const [tiles, setTiles] = useState<TileInstance[]>([]);
@@ -37,7 +24,6 @@ export function CanvasBasicoScreen() {
   const [manualSnapshot, setManualSnapshot] = useState<TileInstance[] | null>(
     null
   );
-  const [expressionType, setExpressionType] = useState(EXPRESSION_TYPES[0]);
 
   const inventoryItems = INVENTORY_ITEMS;
 
@@ -196,20 +182,6 @@ export function CanvasBasicoScreen() {
           </label>
         </div>
         <div className="controls-row">
-          <label className="select-label">
-            {t('expression.typeLabel')}
-            <select
-              className="select"
-              value={expressionType}
-              onChange={(event) => setExpressionType(event.target.value)}
-            >
-              {EXPRESSION_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {t(`expressionTypes.${type}`)}
-                </option>
-              ))}
-            </select>
-          </label>
           {parseError && <span className="error-text">{parseError}</span>}
         </div>
       </div>

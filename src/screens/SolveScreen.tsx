@@ -13,19 +13,6 @@ import {
 import { GRID_CONFIG, layoutTiles } from '../utils/grid';
 import { nextId } from '../utils/id';
 
-const EXPRESSION_TYPES = [
-  'integers',
-  'zeroPairs',
-  'simpleEquations',
-  'twoSideEquations',
-  'likeTerms',
-  'distributive',
-  'areaProducts',
-  'binomialMultiplication',
-  'perfectSquare',
-  'completeSquare'
-];
-
 type TilePairState = {
   left: TileInstance[];
   right: TileInstance[];
@@ -44,7 +31,6 @@ export function SolveScreen() {
   const [manualSnapshot, setManualSnapshot] = useState<TilePairState | null>(
     null
   );
-  const [expressionType, setExpressionType] = useState(EXPRESSION_TYPES[0]);
 
   const inventoryItems = INVENTORY_ITEMS;
 
@@ -265,20 +251,6 @@ export function SolveScreen() {
           </label>
         </div>
         <div className="controls-row">
-          <label className="select-label">
-            {t('expression.typeLabel')}
-            <select
-              className="select"
-              value={expressionType}
-              onChange={(event) => setExpressionType(event.target.value)}
-            >
-              {EXPRESSION_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {t(`expressionTypes.${type}`)}
-                </option>
-              ))}
-            </select>
-          </label>
           {parseError && <span className="error-text">{parseError}</span>}
         </div>
       </div>
