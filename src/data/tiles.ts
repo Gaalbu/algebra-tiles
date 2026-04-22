@@ -94,17 +94,17 @@ export const TILE_LEGEND: TileLegendEntry[] = [
   baseLegend.x2.neg,
   {
     id: 'dual-face',
-    name: 'Pecas de dupla face',
+    name: 'Peças de dupla face',
     dimensions: 'variavel',
     representation: '+/-1, +/-x ou +/-x²',
-    reading: 'Mudanca rapida de sinal'
+    reading: 'Mudança rápida de sinal'
   },
   {
     id: 'fragments',
     name: 'Fragmentos e tiras',
-    dimensions: 'variavel',
+    dimensions: 'variável',
     representation: 'apoio operacional',
-    reading: 'Composicao, particao e organizacao visual'
+    reading: 'Composição, partição e organização visual'
   }
 ];
 

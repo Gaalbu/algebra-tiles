@@ -5,128 +5,128 @@ const resources = {
   'pt-BR': {
     translation: {
       app: {
-        title: 'Blocos Algebricos'
+        title: 'Blocos Algébricos'
       },
       nav: {
-        home: 'Inicio',
-        equations: 'Equacoes',
+        home: 'Início',
+        equations: 'Equações',
         difficulty: 'Dificuldade',
         workspace: 'Workspace',
-        canvasBasico: 'Canvas basico',
+        canvasBasico: 'Canvas básico',
         solve: 'Solve',
         factor: 'Factor'
       },
       home: {
-        title: 'Aprenda com blocos algebricos',
-        subtitle: 'Escolha um conjunto de equacoes e comece a montar.',
+        title: 'Aprenda com blocos algébricos',
+        subtitle: 'Escolha um conjunto de equações e comece a montar.',
         start: 'Iniciar agora',
         chooseTitle: 'Escolha a atividade',
-        chooseSubtitle: 'Selecione a pagina que deseja abrir.',
+        chooseSubtitle: 'Selecione a página que deseja abrir.',
         open: 'Abrir',
-        canvasBasicoTitle: 'Canvas basico',
+        canvasBasicoTitle: 'Canvas básico',
         canvasBasicoDesc: 'Monte blocos livremente e experimente expressoes.',
         solveTitle: 'Solve',
-        solveDesc: 'Equacoes com dois lados e operacoes equivalentes.',
+        solveDesc: 'Equações com dois lados e operações equivalentes.',
         factorTitle: 'Factor',
-        factorDesc: 'Modelagem de area para fatoracao.',
-        equationsTitle: 'Equacoes',
-        equationsDesc: 'Selecione desafios por nivel.'
+        factorDesc: 'Modelagem de área para fatoração.',
+        equationsTitle: 'Equações',
+        equationsDesc: 'Selecione desafios por nível.'
       },
       equations: {
-        title: 'Selecao de expressoes',
+        title: 'Seleção de expressões',
         subtitle: 'Escolha um tipo para trabalhar',
         selected: 'Selecionado:'
       },
       difficulty: {
         title: 'Selecione a dificuldade',
-        subtitle: 'Defina o nivel para o conjunto escolhido',
-        easy: 'Facil',
-        easyDesc: 'Equacoes introdutorias',
-        medium: 'Medio',
+        subtitle: 'Defina o nível para o conjunto escolhido',
+        easy: 'Fácil',
+        easyDesc: 'Equações introdutorias',
+        medium: 'Médio',
         mediumDesc: 'Mais termos e sinais',
-        hard: 'Dificil',
+        hard: 'Difícil',
         hardDesc: 'Desafios completos'
       },
       workspace: {
         title: 'Workspace',
-        subtitle: 'Monte sua solucao com blocos',
-        inventory: 'Inventario',
-        grid: 'Area de montagem',
+        subtitle: 'Monte sua solução com blocos',
+        inventory: 'Inventário',
+        grid: 'Área de montagem',
         tools: 'Ferramentas',
-        expression: 'Expressao ativa',
+        expression: 'Expressão ativa',
         clear: 'Limpar workspace',
         zeroPair: 'Zero pair',
         deleteSelected: 'Apagar selecionado',
-        backToSelection: 'Voltar para selecao',
-        selectedEquation: 'Equacao selecionada:' ,
+        backToSelection: 'Voltar para seleção',
+        selectedEquation: 'Equação selecionada:' ,
         undo: 'Desfazer',
         redo: 'Refazer',
         check: 'Verificar resultado',
         target: 'Objetivo'
       },
       canvasBasico: {
-        title: 'Canvas basico',
-        subtitle: 'Monte blocos livremente e teste expressoes.'
+        title: 'Canvas básico',
+        subtitle: 'Monte blocos livremente e teste expressões.'
       },
       solve: {
         title: 'Solve',
-        subtitle: 'Equacoes com dois lados e operacoes equivalentes.',
-        placeholder: 'Digite a equacao (ex.: x + 2 = 5)',
+        subtitle: 'Equações com dois lados e operações equivalentes.',
+        placeholder: 'Digite a equação (ex.: x + 2 = 5)',
         leftSide: 'Lado esquerdo',
         rightSide: 'Lado direito',
-        summary: 'Resumo da equacao'
+        summary: 'Resumo da equação'
       },
       factor: {
         title: 'Factor',
-        subtitle: 'Modele a area para fatorar polinomios.',
-        gridLabel: 'Area de fatoracao',
+        subtitle: 'Modele a área para fatorar polinômios.',
+        gridLabel: 'Área de fatoração',
         resultLabel: 'Resultado',
-        autoHint: 'Deteccao automatica do retangulo pelo canvas',
-        valid: 'Fatoracao detectada:',
-        invalid: 'Retangulo invalido ou incompleto.',
+        autoHint: 'Detecção automática do retângulo pelo canvas',
+        valid: 'Fatoração detectada:',
+        invalid: 'Retângulo inválido ou incompleto.',
         gaps: 'Lacunas',
-        overlaps: 'Sobreposicoes',
+        overlaps: 'Sobreposições',
         gapSample: 'Exemplos de lacunas',
-        overlapSample: 'Exemplos de sobreposicoes',
+        overlapSample: 'Exemplos de sobreposições',
         times: 'x'
       },
       expression: {
-        placeholder: 'Digite a expressao (ex.: x² + 3x - 2)',
-        showSolution: 'Mostrar solucao em blocos',
-        invalid: 'Expressao invalida',
-        typeLabel: 'Tipo de expressao'
+        placeholder: 'Digite a expressão (ex.: x² + 3x - 2)',
+        showSolution: 'Mostrar solução em blocos',
+        invalid: 'Expressão inválida',
+        typeLabel: 'Tipo de expressão'
       },
       expressionTypes: {
         integers: 'Inteiros com sinal',
         zeroPairs: 'Pares nulos',
-        simpleEquations: 'Equacoes simples',
-        twoSideEquations: 'Equacoes com dois lados',
+        simpleEquations: 'Equações simples',
+        twoSideEquations: 'Equações com dois lados',
         likeTerms: 'Termos semelhantes',
         distributive: 'Distributiva',
-        areaProducts: 'Area de produtos algebricos',
-        binomialMultiplication: 'Multiplicacao de binomios',
+        areaProducts: 'Área de produtos algébricos',
+        binomialMultiplication: 'Multiplicação de binômios',
         perfectSquare: 'Quadrado perfeito',
         completeSquare: 'Completar quadrados'
       },
       expressionTypeDescriptions: {
         integers: 'Operacoes com inteiros e sinais.',
         zeroPairs: 'Identifique e use pares nulos.',
-        simpleEquations: 'Equacoes com uma variavel.',
-        twoSideEquations: 'Equacoes com dois lados.',
+        simpleEquations: 'Equações com uma variável.',
+        twoSideEquations: 'Equações com dois lados.',
         likeTerms: 'Simplifique termos semelhantes.',
         distributive: 'Aplique a propriedade distributiva.',
-        areaProducts: 'Produtos por area e retangulos.',
-        binomialMultiplication: 'Multiplique binomios com blocos.',
+        areaProducts: 'Produtos por área e retângulos.',
+        binomialMultiplication: 'Multiplique binômios com blocos.',
         perfectSquare: 'Reconheca quadrados perfeitos.',
         completeSquare: 'Complete quadrados para fatorar.'
       },
       validation: {
         title: {
-          success: 'Parabens!',
+          success: 'Parabéns!',
           fail: 'Tente novamente'
         },
         success: 'Resultado correto. Muito bem!',
-        fail: 'Ainda nao. Tente novamente.',
+        fail: 'Ainda não. Tente novamente.',
         primarySuccess: 'Novo desafio',
         primaryFail: 'Continuar',
         keep: 'Manter no tabuleiro'
@@ -136,9 +136,9 @@ const resources = {
         back: 'Voltar'
       },
       equationsData: {
-        linearTitle: 'Equacoes lineares',
+        linearTitle: 'Equações lineares',
         linearDesc: 'Trabalhe com termos x e constantes',
-        quadraticTitle: 'Equacoes quadradas',
+        quadraticTitle: 'Equações quadradas',
         quadraticDesc: 'Inclui termos x²',
         mixTitle: 'Misturadas',
         mixDesc: 'Combina varios formatos'
