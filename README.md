@@ -24,8 +24,13 @@ npm run dev
 npm run build
 npm run preview
 npm run lint
+npm run typecheck
 npm run format
 ```
+
+### Estado e limitações
+
+As interações de arrastar e soltar, snap na grade, seleção, rotação e desfazer/refazer estão implementadas no cliente. O repositório ainda não possui testes automatizados de interação; a CI valida lint, tipos e build.
 
 ## English
 
@@ -51,5 +56,10 @@ npm run dev
 npm run build
 npm run preview
 npm run lint
+npm run typecheck
 npm run format
 ```
+
+### Status and limitations
+
+Drag and drop, grid snapping, selection, rotation, and undo/redo are implemented in the client. Automated interaction tests are not yet available; CI validates lint, types, and the production build.
