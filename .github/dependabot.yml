@@ -11,7 +11,11 @@ updates:
     ignore:
       - dependency-name: react
         update-types: ["version-update:semver-major"]
+      - dependency-name: react-dom
+        update-types: ["version-update:semver-major"]
       - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
         update-types: ["version-update:semver-major"]
       - dependency-name: react-i18next
         update-types: ["version-update:semver-major"]
@@ -21,6 +25,10 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: eslint-plugin-react-refresh
         versions: [">=0.5.0"]
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      - dependency-name: vite
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
