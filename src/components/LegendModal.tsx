@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { TILE_LEGEND } from '../data/tiles';
 
 type LegendModalProps = {
@@ -6,12 +7,29 @@ type LegendModalProps = {
 };
 
 export function LegendModal({ isOpen, onClose }: LegendModalProps) {
-  if (!isOpen) {
-    return null;
-  }
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) {
+      return;
+    }
+    if (isOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!isOpen && dialog.open) {
+      dialog.close();
+    }
+  }, [isOpen]);
 
   return (
-    <div className="modal-overlay" role="dialog" aria-modal="true">
+    <dialog
+      className="modal-overlay"
+      ref={dialogRef}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+    >
       <div className="modal legend-modal">
         <div className="legend-modal-header">
           <h2>Legenda das pecas</h2>
@@ -50,6 +68,6 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
           </table>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

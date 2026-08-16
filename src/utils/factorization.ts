@@ -10,17 +10,24 @@ export type FactorizationResult = {
   bounds: { minX: number; minY: number; maxX: number; maxY: number } | null;
 };
 
-export function detectFactorization(tiles: TileInstance[]): FactorizationResult {
+type Coverage = {
+  occupied: Map<string, string>;
+  overlaps: Array<{ x: number; y: number }>;
+  hasCells: boolean;
+  hasNegative: boolean;
+  bounds: { minX: number; minY: number; maxX: number; maxY: number };
+};
+
+function computeCoverage(tiles: TileInstance[]): Coverage {
   const occupied = new Map<string, string>();
   const overlaps: Array<{ x: number; y: number }> = [];
-  const gaps: Array<{ x: number; y: number }> = [];
 
   let hasCells = false;
+  let hasNegative = false;
   let minX = Infinity;
   let minY = Infinity;
   let maxX = -Infinity;
   let maxY = -Infinity;
-  let hasNegative = false;
 
   for (const tile of tiles) {
     if (tile.sign === -1) {
@@ -48,38 +55,30 @@ export function detectFactorization(tiles: TileInstance[]): FactorizationResult 
     }
   }
 
-  if (!hasCells) {
-    return {
-      isRect: false,
-      factors: null,
-      gaps,
-      overlaps,
-      bounds: null
-    };
-  }
+  return { occupied, overlaps, hasCells, hasNegative, bounds: { minX, minY, maxX, maxY } };
+}
 
-  for (let x = minX; x <= maxX; x += 1) {
-    for (let y = minY; y <= maxY; y += 1) {
+function findGaps(
+  occupied: Map<string, string>,
+  bounds: { minX: number; minY: number; maxX: number; maxY: number }
+) {
+  const gaps: Array<{ x: number; y: number }> = [];
+  for (let x = bounds.minX; x <= bounds.maxX; x += 1) {
+    for (let y = bounds.minY; y <= bounds.maxY; y += 1) {
       const key = `${x},${y}`;
       if (!occupied.has(key)) {
         gaps.push({ x, y });
       }
     }
   }
+  return gaps;
+}
 
-  const isRect = overlaps.length === 0 && gaps.length === 0;
-  const bounds = { minX, minY, maxX, maxY };
-
-  if (!isRect || hasNegative) {
-    return { isRect, factors: null, gaps, overlaps, bounds };
-  }
-
-  const widthCells = maxX - minX + 1;
-  const heightCells = maxY - minY + 1;
-  const counts = countTiles(tiles);
-
-  let factors: [string, string] | null = null;
-
+function findFactors(
+  widthCells: number,
+  heightCells: number,
+  counts: { x2: number; x: number; one: number }
+): [string, string] | null {
   for (let a = 1; a <= Math.floor(widthCells / VARIABLE_LENGTH); a += 1) {
     const b = widthCells - a * VARIABLE_LENGTH;
     if (b < 0) {
@@ -95,14 +94,37 @@ export function detectFactorization(tiles: TileInstance[]): FactorizationResult 
         a * d + b * c === counts.x &&
         b * d === counts.one
       ) {
-        factors = [formatFactor(a, b), formatFactor(c, d)];
-        break;
+        return [formatFactor(a, b), formatFactor(c, d)];
       }
     }
-    if (factors) {
-      break;
-    }
   }
+  return null;
+}
+
+export function detectFactorization(tiles: TileInstance[]): FactorizationResult {
+  const { occupied, overlaps, hasCells, hasNegative, bounds } = computeCoverage(tiles);
+
+  if (!hasCells) {
+    return {
+      isRect: false,
+      factors: null,
+      gaps: [],
+      overlaps,
+      bounds: null
+    };
+  }
+
+  const gaps = findGaps(occupied, bounds);
+  const isRect = overlaps.length === 0 && gaps.length === 0;
+
+  if (!isRect || hasNegative) {
+    return { isRect, factors: null, gaps, overlaps, bounds };
+  }
+
+  const widthCells = bounds.maxX - bounds.minX + 1;
+  const heightCells = bounds.maxY - bounds.minY + 1;
+  const counts = countTiles(tiles);
+  const factors = findFactors(widthCells, heightCells, counts);
 
   return { isRect, factors, gaps, overlaps, bounds };
 }

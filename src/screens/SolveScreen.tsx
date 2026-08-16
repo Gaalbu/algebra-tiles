@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
@@ -68,22 +68,23 @@ export function SolveScreen() {
     };
   }, [showSolution, expressionInput]);
 
-  const updatePairTiles = (
-    updater: (current: TilePairState) => TilePairState
-  ) => {
-    if (showSolution) {
-      return;
-    }
-    const currentState = { left: leftTiles, right: rightTiles };
-    const next = updater(currentState);
-    if (next.left === leftTiles && next.right === rightTiles) {
-      return;
-    }
-    setHistory((stack) => [...stack, currentState]);
-    setFuture([]);
-    setLeftTiles(next.left);
-    setRightTiles(next.right);
-  };
+  const updatePairTiles = useCallback(
+    (updater: (current: TilePairState) => TilePairState) => {
+      if (showSolution) {
+        return;
+      }
+      const currentState = { left: leftTiles, right: rightTiles };
+      const next = updater(currentState);
+      if (next.left === leftTiles && next.right === rightTiles) {
+        return;
+      }
+      setHistory((stack) => [...stack, currentState]);
+      setFuture([]);
+      setLeftTiles(next.left);
+      setRightTiles(next.right);
+    },
+    [showSolution, leftTiles, rightTiles]
+  );
 
   useEffect(() => {
     if (!showSolution) {
@@ -229,7 +230,7 @@ export function SolveScreen() {
     setSelectedRightIds([]);
   };
 
-  const handleRotateSelected = () => {
+  const handleRotateSelected = useCallback(() => {
     if (showSolution) {
       return;
     }
@@ -239,7 +240,7 @@ export function SolveScreen() {
       left: current.left.map((tile) => rotateTileIfNeeded(tile, leftSet)),
       right: current.right.map((tile) => rotateTileIfNeeded(tile, rightSet))
     }));
-  };
+  }, [showSolution, selectedLeftIds, selectedRightIds, updatePairTiles]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -258,7 +259,7 @@ export function SolveScreen() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showSolution, selectedLeftIds, selectedRightIds]);
+  }, [showSolution, selectedLeftIds, selectedRightIds, handleRotateSelected]);
 
   const openContextMenu = (position: { x: number; y: number }) => {
     if (showSolution) {

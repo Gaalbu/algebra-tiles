@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
@@ -26,19 +26,20 @@ export function FactorScreen() {
 
   const factorization = useMemo(() => detectFactorization(tiles), [tiles]);
 
-  const updateTiles = (
-    updater: (current: TileInstance[]) => TileInstance[]
-  ) => {
-    setTiles((current) => {
-      const next = updater(current);
-      if (next === current) {
-        return current;
-      }
-      setHistory((stack) => [...stack, current]);
-      setFuture([]);
-      return next;
-    });
-  };
+  const updateTiles = useCallback(
+    (updater: (current: TileInstance[]) => TileInstance[]) => {
+      setTiles((current) => {
+        const next = updater(current);
+        if (next === current) {
+          return current;
+        }
+        setHistory((stack) => [...stack, current]);
+        setFuture([]);
+        return next;
+      });
+    },
+    []
+  );
 
   const handleAddTile = (item: InventoryItem, x = 0, y = 0) => {
     updateTiles((current) => [
@@ -109,7 +110,7 @@ export function FactorScreen() {
     setSelectedIds([]);
   };
 
-  const handleRotateSelected = () => {
+  const handleRotateSelected = useCallback(() => {
     if (selectedIds.length === 0) {
       return;
     }
@@ -131,7 +132,7 @@ export function FactorScreen() {
         };
       })
     );
-  };
+  }, [selectedIds, updateTiles]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -150,7 +151,7 @@ export function FactorScreen() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedIds]);
+  }, [selectedIds, handleRotateSelected]);
 
   const openContextMenu = (position: { x: number; y: number }) => {
     setContextMenu({ isOpen: true, x: position.x, y: position.y });

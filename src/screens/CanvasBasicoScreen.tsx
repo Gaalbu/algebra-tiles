@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GridBoard } from '../components/GridBoard';
 import { InventoryPanel } from '../components/InventoryPanel';
@@ -41,22 +41,23 @@ export function CanvasBasicoScreen() {
     [showSolution, expressionInput]
   );
 
-  const updateTiles = (
-    updater: (current: TileInstance[]) => TileInstance[]
-  ) => {
-    if (showSolution) {
-      return;
-    }
-    setTiles((current) => {
-      const next = updater(current);
-      if (next === current) {
-        return current;
+  const updateTiles = useCallback(
+    (updater: (current: TileInstance[]) => TileInstance[]) => {
+      if (showSolution) {
+        return;
       }
-      setHistory((stack) => [...stack, current]);
-      setFuture([]);
-      return next;
-    });
-  };
+      setTiles((current) => {
+        const next = updater(current);
+        if (next === current) {
+          return current;
+        }
+        setHistory((stack) => [...stack, current]);
+        setFuture([]);
+        return next;
+      });
+    },
+    [showSolution]
+  );
 
   useEffect(() => {
     if (!showSolution) {
@@ -160,7 +161,7 @@ export function CanvasBasicoScreen() {
     setSelectedIds([]);
   };
 
-  const handleRotateSelected = () => {
+  const handleRotateSelected = useCallback(() => {
     if (showSolution || selectedIds.length === 0) {
       return;
     }
@@ -182,7 +183,7 @@ export function CanvasBasicoScreen() {
         };
       })
     );
-  };
+  }, [showSolution, selectedIds, updateTiles]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -201,7 +202,7 @@ export function CanvasBasicoScreen() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showSolution, selectedIds]);
+  }, [showSolution, selectedIds, handleRotateSelected]);
 
   const openContextMenu = (position: { x: number; y: number }) => {
     if (showSolution) {

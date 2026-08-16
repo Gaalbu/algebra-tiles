@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+const modeCards = [
+  { titleKey: 'home.canvasBasicoTitle', descKey: 'home.canvasBasicoDesc', to: '/canvas-basico' },
+  { titleKey: 'home.solveTitle', descKey: 'home.solveDesc', to: '/solve' },
+  { titleKey: 'home.factorTitle', descKey: 'home.factorDesc', to: '/factor' },
+  { titleKey: 'home.equationsTitle', descKey: 'home.equationsDesc', to: '/equations' }
+] as const;
+
 export function HomeScreen() {
   const { t } = useTranslation();
 
@@ -11,34 +18,15 @@ export function HomeScreen() {
         <p>{t('home.chooseSubtitle')}</p>
       </div>
       <div className="grid two">
-        <div className="card">
-          <h2>{t('home.canvasBasicoTitle')}</h2>
-          <p>{t('home.canvasBasicoDesc')}</p>
-          <Link className="btn" to="/canvas-basico">
-            {t('home.open')}
-          </Link>
-        </div>
-        <div className="card">
-          <h2>{t('home.solveTitle')}</h2>
-          <p>{t('home.solveDesc')}</p>
-          <Link className="btn" to="/solve">
-            {t('home.open')}
-          </Link>
-        </div>
-        <div className="card">
-          <h2>{t('home.factorTitle')}</h2>
-          <p>{t('home.factorDesc')}</p>
-          <Link className="btn" to="/factor">
-            {t('home.open')}
-          </Link>
-        </div>
-        <div className="card">
-          <h2>{t('home.equationsTitle')}</h2>
-          <p>{t('home.equationsDesc')}</p>
-          <Link className="btn" to="/equations">
-            {t('home.open')}
-          </Link>
-        </div>
+        {modeCards.map((card) => (
+          <div className="card" key={card.to}>
+            <h2>{t(card.titleKey)}</h2>
+            <p>{t(card.descKey)}</p>
+            <Link className="btn" to={card.to}>
+              {t('home.open')}
+            </Link>
+          </div>
+        ))}
       </div>
     </section>
   );
