@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 type ResultModalProps = {
   isOpen: boolean;
   title: string;
@@ -17,12 +19,31 @@ export function ResultModal({
   secondaryLabel,
   onSecondary
 }: ResultModalProps) {
-  if (!isOpen) {
-    return null;
-  }
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) {
+      return;
+    }
+    if (isOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!isOpen && dialog.open) {
+      dialog.close();
+    }
+  }, [isOpen]);
 
   return (
-    <div className="modal-overlay" role="dialog" aria-modal="true">
+    <dialog
+      className="modal-overlay"
+      ref={dialogRef}
+      onCancel={(event) => {
+        if (onSecondary) {
+          event.preventDefault();
+          onSecondary();
+        }
+      }}
+    >
       <div className="modal">
         <h2>{title}</h2>
         <p>{message}</p>
@@ -37,6 +58,6 @@ export function ResultModal({
           </button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

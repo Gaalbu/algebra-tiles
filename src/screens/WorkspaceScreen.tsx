@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { equationSets } from '../data/equations';
@@ -80,24 +80,24 @@ export function WorkspaceScreen() {
     }
     const nextIndex = Math.floor(Math.random() * count);
     setCurrentTargetIndex(nextIndex);
-  }, [selectedExpressionType?.id]);
+  }, [selectedExpressionType]);
 
-  const updateTiles = (
-    updater: (current: TileInstance[]) => TileInstance[],
-    recordHistory = true
-  ) => {
-    setTiles((current) => {
-      const next = updater(current);
-      if (next === current) {
-        return current;
-      }
-      if (recordHistory) {
-        setHistory((stack) => [...stack, current]);
-        setFuture([]);
-      }
-      return next;
-    });
-  };
+  const updateTiles = useCallback(
+    (updater: (current: TileInstance[]) => TileInstance[], recordHistory = true) => {
+      setTiles((current) => {
+        const next = updater(current);
+        if (next === current) {
+          return current;
+        }
+        if (recordHistory) {
+          setHistory((stack) => [...stack, current]);
+          setFuture([]);
+        }
+        return next;
+      });
+    },
+    []
+  );
 
   const handleAddTile = (item: InventoryItem, x = 0, y = 0) => {
     updateTiles((current) => [
@@ -203,7 +203,7 @@ export function WorkspaceScreen() {
     setSelectedIds([]);
   };
 
-  const handleRotateSelected = () => {
+  const handleRotateSelected = useCallback(() => {
     if (selectedIds.length === 0) {
       return;
     }
@@ -225,7 +225,7 @@ export function WorkspaceScreen() {
         };
       })
     );
-  };
+  }, [selectedIds, updateTiles]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -244,7 +244,7 @@ export function WorkspaceScreen() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedIds]);
+  }, [selectedIds, handleRotateSelected]);
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {

@@ -4,6 +4,7 @@
   font-weight: 400;
   color: #0e2a2e;
   background-color: #e7f4f1;
+  overflow-x: clip;
   --tile-unit-pos: #5cc77a;
   --tile-unit-neg: #9ea7ad;
   --tile-linear-pos: #4f8fe3;
@@ -19,12 +20,18 @@
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: clip;
   background: radial-gradient(circle at 10% 10%, #e9fbf5, #dff3f4 55%, #d1e7f3);
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid #0e2a2e;
+  outline-offset: 3px;
 }
 
 button {
@@ -70,8 +77,10 @@ button:disabled {
 
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 16px 24px;
   border-bottom: 1px solid #b4d6d2;
   background: linear-gradient(90deg, #cfeee8, #eaf7f4);
@@ -86,6 +95,7 @@ button:disabled {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   font-weight: 600;
 }
@@ -406,14 +416,27 @@ button:disabled {
   color: #1b2b4f;
 }
 
-.modal-overlay {
+dialog.modal-overlay {
   position: fixed;
   inset: 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 24px;
+  background: transparent;
+  z-index: 10;
+}
+
+dialog.modal-overlay::backdrop {
   background: rgba(8, 31, 36, 0.45);
+}
+
+dialog.modal-overlay[open] {
   display: grid;
   place-items: center;
-  padding: 24px;
-  z-index: 10;
 }
 
 .modal {
