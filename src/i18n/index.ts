@@ -64,6 +64,9 @@ const resources = {
       footer: {
         credit: 'Desenvolvimento por Gabriel Albuquerque Alencar'
       },
+      footer: {
+        credit: 'Desenvolvimento por Gabriel Albuquerque Alencar'
+      },
       nav: {
         home: 'Início',
         equations: 'Equações',
@@ -264,6 +267,9 @@ const resources = {
             reading: 'Composition, partition and visual organization'
           }
         }
+      },
+      footer: {
+        credit: 'Developed by Gabriel Albuquerque Alencar'
       },
       footer: {
         credit: 'Developed by Gabriel Albuquerque Alencar'
