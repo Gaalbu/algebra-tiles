@@ -20,6 +20,9 @@ const resources = {
         factor: 'Fatoração'
       },
       home: {
+        eyebrow: 'Álgebra com blocos',
+        heroLead: 'Aprenda álgebra com',
+        heroEm: 'blocos arrastáveis',
         title: 'Aprenda com blocos algébricos',
         subtitle: 'Escolha um conjunto de equações e comece a montar.',
         start: 'Iniciar agora',
@@ -167,6 +170,9 @@ const resources = {
         factor: 'Factor'
       },
       home: {
+        eyebrow: 'Algebra with tiles',
+        heroLead: 'Learn algebra with',
+        heroEm: 'draggable tiles',
         title: 'Learn with algebra tiles',
         subtitle: 'Choose an equation set and start building.',
         start: 'Start now',
