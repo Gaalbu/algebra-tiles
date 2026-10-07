@@ -549,8 +549,8 @@ button:disabled {
 .legend-swatch.neg {
   background-image: repeating-linear-gradient(
     135deg,
-    rgba(14, 42, 46, 0.3) 0,
-    rgba(14, 42, 46, 0.3) 1.5px,
+    color-mix(in srgb, var(--ink) 30%, transparent) 0,
+    color-mix(in srgb, var(--ink) 30%, transparent) 1.5px,
     transparent 1.5px,
     transparent 7px
   );
@@ -625,7 +625,7 @@ dialog.modal-overlay {
 }
 
 dialog.modal-overlay::backdrop {
-  background: rgba(14, 42, 46, 0.5);
+  background: color-mix(in srgb, var(--ink) 50%, transparent);
 }
 
 dialog.modal-overlay[open] {
