@@ -5,7 +5,61 @@ const resources = {
   'pt-BR': {
     translation: {
       app: {
-        title: 'Blocos Algébricos'
+        title: 'Blocos Algébricos',
+        language: 'Idioma'
+      },
+      legend: {
+        title: 'Legenda das peças',
+        close: 'Fechar',
+        open: 'Legenda',
+        columns: {
+          piece: 'Peça',
+          dimensions: 'Dimensões',
+          representation: 'Representação',
+          reading: 'Leitura didática'
+        },
+        entries: {
+          'unit-pos': {
+            name: 'Quadrado verde',
+            dimensions: '1 x 1',
+            reading: 'Unidade, positiva'
+          },
+          'unit-neg': {
+            name: 'Quadrado cinza',
+            dimensions: '1 x 1',
+            reading: 'Unidade, negativa'
+          },
+          'linear-pos': {
+            name: 'Retângulo azul',
+            dimensions: '1 x 3,5',
+            reading: 'Termo linear positivo'
+          },
+          'linear-neg': {
+            name: 'Retângulo laranja',
+            dimensions: '1 x 3,5',
+            reading: 'Termo linear negativo'
+          },
+          'quadratic-pos': {
+            name: 'Quadrado violeta',
+            dimensions: '3,5 x 3,5',
+            reading: 'Termo quadrático positivo'
+          },
+          'quadratic-neg': {
+            name: 'Quadrado amarelo',
+            dimensions: '3,5 x 3,5',
+            reading: 'Termo quadrático negativo'
+          },
+          'dual-face': {
+            name: 'Peças de dupla face',
+            dimensions: 'variável',
+            reading: 'Mudança rápida de sinal'
+          },
+          fragments: {
+            name: 'Fragmentos e tiras',
+            dimensions: 'variável',
+            reading: 'Composição, partição e organização visual'
+          }
+        }
       },
       footer: {
         credit: 'Desenvolvimento por Gabriel Albuquerque Alencar'
@@ -65,7 +119,7 @@ const resources = {
         deleteSelected: 'Apagar',
         rotate: 'Rotacionar',
         backToSelection: 'Voltar para seleção',
-        selectedEquation: 'Equação selecionada:' ,
+        selectedEquation: 'Equação selecionada:',
         undo: 'Desfazer',
         redo: 'Refazer',
         check: 'Verificar resultado',
@@ -155,7 +209,61 @@ const resources = {
   en: {
     translation: {
       app: {
-        title: 'Algebra Tiles'
+        title: 'Algebra Tiles',
+        language: 'Language'
+      },
+      legend: {
+        title: 'Tile legend',
+        close: 'Close',
+        open: 'Legend',
+        columns: {
+          piece: 'Tile',
+          dimensions: 'Dimensions',
+          representation: 'Representation',
+          reading: 'Reading'
+        },
+        entries: {
+          'unit-pos': {
+            name: 'Green square',
+            dimensions: '1 x 1',
+            reading: 'Unit, positive'
+          },
+          'unit-neg': {
+            name: 'Gray square',
+            dimensions: '1 x 1',
+            reading: 'Unit, negative'
+          },
+          'linear-pos': {
+            name: 'Blue rectangle',
+            dimensions: '1 x 3.5',
+            reading: 'Positive linear term'
+          },
+          'linear-neg': {
+            name: 'Orange rectangle',
+            dimensions: '1 x 3.5',
+            reading: 'Negative linear term'
+          },
+          'quadratic-pos': {
+            name: 'Violet square',
+            dimensions: '3.5 x 3.5',
+            reading: 'Positive quadratic term'
+          },
+          'quadratic-neg': {
+            name: 'Yellow square',
+            dimensions: '3.5 x 3.5',
+            reading: 'Negative quadratic term'
+          },
+          'dual-face': {
+            name: 'Double-sided tiles',
+            dimensions: 'variable',
+            reading: 'Quick sign change'
+          },
+          fragments: {
+            name: 'Fragments and strips',
+            dimensions: 'variable',
+            reading: 'Composition, partition and visual organization'
+          }
+        }
       },
       footer: {
         credit: 'Developed by Gabriel Albuquerque Alencar'
@@ -215,7 +323,7 @@ const resources = {
         deleteSelected: 'Delete',
         rotate: 'Rotate',
         backToSelection: 'Back to selection',
-        selectedEquation: 'Selected equation:' ,
+        selectedEquation: 'Selected equation:',
         undo: 'Undo',
         redo: 'Redo',
         check: 'Check result',
