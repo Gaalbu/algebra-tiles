@@ -19,7 +19,7 @@ export function TilePiece({
   const pxHeight = size.height * GRID_CONFIG.cellSize;
 
   const label = tile.kind === '1' ? '1' : tile.kind === 'x' ? 'x' : 'x²';
-  const sign = tile.sign === 1 ? '+' : '-';
+  const sign = tile.sign === 1 ? '+' : '−';
 
   return (
     <div

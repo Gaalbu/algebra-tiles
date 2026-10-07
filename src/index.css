@@ -523,22 +523,37 @@ button:disabled {
 .tile {
   display: grid;
   place-items: center;
-  border-radius: 10px;
-  border: 2px solid #0e2a2e;
-  background: #6fd4c6;
-  font-weight: 700;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--ink);
+  background: var(--paper-3);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 600;
   user-select: none;
   touch-action: none;
-  box-shadow: 0 6px 14px rgba(27, 31, 36, 0.15);
+  transition: box-shadow 0.15s var(--ease);
+}
+
+.tile:active {
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 .tile.selected {
-  outline: 3px solid #0e2a2e;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-.tile.neg {
-  background: #8fb2f5;
+/* peças negativas: hachura diagonal, para não depender só da cor */
+.tile.neg,
+.inventory-item.neg,
+.legend-swatch.neg {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(14, 42, 46, 0.3) 0,
+    rgba(14, 42, 46, 0.3) 1.5px,
+    transparent 1.5px,
+    transparent 7px
+  );
 }
 
 .tile.tile-1.pos,
@@ -575,17 +590,6 @@ button:disabled {
 .inventory-item.tile-x2.neg,
 .legend-swatch.tile-x2.neg {
   background: var(--tile-quad-neg);
-}
-
-.tile.tile-x.vertical {
-  background-image: repeating-linear-gradient(
-    90deg,
-    rgba(12, 30, 36, 0.2) 0,
-    rgba(12, 30, 36, 0.2) 4px,
-    transparent 4px,
-    transparent 8px
-  );
-  background-blend-mode: multiply;
 }
 
 .result {
