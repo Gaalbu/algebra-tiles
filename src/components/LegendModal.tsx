@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TILE_LEGEND } from '../data/tiles';
 
 type LegendModalProps = {
@@ -7,6 +8,7 @@ type LegendModalProps = {
 };
 
 export function LegendModal({ isOpen, onClose }: LegendModalProps) {
+  const { t } = useTranslation();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -32,19 +34,19 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
     >
       <div className="modal legend-modal">
         <div className="legend-modal-header">
-          <h2>Legenda das pecas</h2>
+          <h2>{t('legend.title')}</h2>
           <button className="btn secondary" type="button" onClick={onClose}>
-            Fechar
+            {t('legend.close')}
           </button>
         </div>
         <div className="legend-table-wrapper">
           <table className="legend-table">
             <thead>
               <tr>
-                <th>Peca</th>
-                <th>Dimensoes</th>
-                <th>Representacao</th>
-                <th>Leitura didatica</th>
+                <th>{t('legend.columns.piece')}</th>
+                <th>{t('legend.columns.dimensions')}</th>
+                <th>{t('legend.columns.representation')}</th>
+                <th>{t('legend.columns.reading')}</th>
               </tr>
             </thead>
             <tbody>
@@ -56,12 +58,12 @@ export function LegendModal({ isOpen, onClose }: LegendModalProps) {
                         className={`legend-swatch ${entry.swatchClass ?? 'muted'}`}
                         aria-hidden="true"
                       />
-                      <span>{entry.name}</span>
+                      <span>{t(`legend.entries.${entry.id}.name`)}</span>
                     </div>
                   </td>
-                  <td>{entry.dimensions}</td>
+                  <td>{t(`legend.entries.${entry.id}.dimensions`)}</td>
                   <td>{entry.representation}</td>
-                  <td>{entry.reading}</td>
+                  <td>{t(`legend.entries.${entry.id}.reading`)}</td>
                 </tr>
               ))}
             </tbody>

@@ -27,20 +27,22 @@ export function App() {
             className="icon-button"
             type="button"
             onClick={() => setIsLegendOpen(true)}
-            aria-label="Legenda"
-            title="Legenda"
+            aria-label={t('legend.open')}
+            title={t('legend.open')}
           >
             ?
           </button>
         </div>
         <nav className="nav">
-          <NavLink to="/" end>{t('nav.home')}</NavLink>
+          <NavLink to="/" end>
+            {t('nav.home')}
+          </NavLink>
           <NavLink to="/equations">{t('nav.equations')}</NavLink>
           <NavLink to="/canvas-basico">{t('nav.canvasBasico')}</NavLink>
           <NavLink to="/solve">{t('nav.solve')}</NavLink>
           <NavLink to="/factor">{t('nav.factor')}</NavLink>
         </nav>
-        <div className="lang" role="group" aria-label="Idioma">
+        <div className="lang" role="group" aria-label={t('app.language')}>
           <button
             type="button"
             aria-pressed={i18n.language.startsWith('pt')}
@@ -81,7 +83,10 @@ export function App() {
           <a href="https://github.com/Gaalbu/algebra-tiles">GitHub</a>
         </div>
       </footer>
-      <LegendModal isOpen={isLegendOpen} onClose={() => setIsLegendOpen(false)} />
+      <LegendModal
+        isOpen={isLegendOpen}
+        onClose={() => setIsLegendOpen(false)}
+      />
     </div>
   );
 }
