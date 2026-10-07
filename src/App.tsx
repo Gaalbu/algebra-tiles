@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { HomeScreen } from './screens/HomeScreen';
 import { EquationSelectScreen } from './screens/EquationSelectScreen';
@@ -34,21 +34,23 @@ export function App() {
           </button>
         </div>
         <nav className="nav">
-          <Link to="/">{t('nav.home')}</Link>
-          <Link to="/equations">{t('nav.equations')}</Link>
-          <Link to="/canvas-basico">{t('nav.canvasBasico')}</Link>
-          <Link to="/solve">{t('nav.solve')}</Link>
-          <Link to="/factor">{t('nav.factor')}</Link>
+          <NavLink to="/" end>{t('nav.home')}</NavLink>
+          <NavLink to="/equations">{t('nav.equations')}</NavLink>
+          <NavLink to="/canvas-basico">{t('nav.canvasBasico')}</NavLink>
+          <NavLink to="/solve">{t('nav.solve')}</NavLink>
+          <NavLink to="/factor">{t('nav.factor')}</NavLink>
         </nav>
-        <div>
+        <div className="lang" role="group" aria-label="Idioma">
           <button
-            className="btn secondary"
+            type="button"
+            aria-pressed={i18n.language.startsWith('pt')}
             onClick={() => i18n.changeLanguage('pt-BR')}
           >
             PT
-          </button>{' '}
+          </button>
           <button
-            className="btn secondary"
+            type="button"
+            aria-pressed={!i18n.language.startsWith('pt')}
             onClick={() => i18n.changeLanguage('en')}
           >
             EN
@@ -72,6 +74,13 @@ export function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
+      <footer className="footer">
+        <div className="footer-inner">
+          <span className="footer-mark">{t('app.title')}</span>
+          <span>{t('footer.credit')}</span>
+          <a href="https://github.com/Gaalbu/algebra-tiles">GitHub</a>
+        </div>
+      </footer>
       <LegendModal isOpen={isLegendOpen} onClose={() => setIsLegendOpen(false)} />
     </div>
   );

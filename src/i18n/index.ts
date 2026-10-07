@@ -7,6 +7,9 @@ const resources = {
       app: {
         title: 'Blocos Algébricos'
       },
+      footer: {
+        credit: 'Desenvolvimento por Gabriel Albuquerque Alencar'
+      },
       nav: {
         home: 'Início',
         equations: 'Equações',
@@ -150,6 +153,9 @@ const resources = {
     translation: {
       app: {
         title: 'Algebra Tiles'
+      },
+      footer: {
+        credit: 'Developed by Gabriel Albuquerque Alencar'
       },
       nav: {
         home: 'Home',
