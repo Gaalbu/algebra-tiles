@@ -62,7 +62,7 @@ const resources = {
         }
       },
       footer: {
-        credit: 'Desenvolvimento por Gabriel Albuquerque Alencar'
+        credit: 'Autoria e pesquisa: José Ricardo da Silva Alencar · Desenvolvimento: Gabriel Albuquerque Alencar'
       },
       nav: {
         home: 'Início',
@@ -266,7 +266,7 @@ const resources = {
         }
       },
       footer: {
-        credit: 'Developed by Gabriel Albuquerque Alencar'
+        credit: 'Authorship and research: José Ricardo da Silva Alencar · Development: Gabriel Albuquerque Alencar'
       },
       nav: {
         home: 'Home',
